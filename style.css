@@ -7,19 +7,26 @@
 body{
     color:rgb(50, 51, 51);
     background-color:rgb(230, 230, 230) ;
-    padding: 20px;
+    padding: 30px;
     max-width: 1000px;
     max-height: 1000px;
     margin: 0 auto ;
-    font-size: 30px;
+    font-size: 40px;
 
     input{
         background-color: #fefdfd;
         border: 1px solid rgb(188, 186, 186);
-        font-size: 20px;
+        font-size: 30px;
         border-radius: 10px;
     }
+
+    header img{
+        width: 400px;
+        height:200px;
+
+    }
     
+   
 }
 
 header {
@@ -52,13 +59,13 @@ color: white;
 border: none;
 border-radius: 5px;
 cursor: pointer;
-font-size: 25px;
+font-size: 30px;
 }
 
 .users-login{
     display: grid;
     gap:10px;
-    padding: 20px;
+    padding: 50px;
     justify-content: center;
 
     .users{
@@ -73,7 +80,7 @@ font-size: 25px;
     }
 
     button{
-        width: 200px;
+        width: 250px;
         text-align: center;
         border-radius: 40px;
        
