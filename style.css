@@ -253,48 +253,46 @@ button {
   background-color: #45a049;
 }
 
-/* --- */
+.preference-table {
+  margin-top: 40px;
+}
 
-.register-table {
-    margin-top: 40px;
-  }
-  
-  .register-table table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  .register-table th,
-  .register-table td {
-    border: 1px solid #ccc;
-    padding: 15px;
-    text-align: center;
-    font-size: 40px;
-  }
-  
-  .register-table th {
-    background-color: #555;
-    color: white;
-  }
-  
-  .register-table tr:nth-child(even) {
-    background-color: #f9f9f9;
-  }
-  
-  .register-table tr:nth-child(odd) {
-    background-color: #eaeaea;
-  }
-  
-  .register-table button {
-    background-color: #4caf50;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-size: 30px;
-    border-radius: 5px;
-  }
-  
-  .register-table button:hover {
-    background-color: #45a049;
-  }
+.preference-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.preference-table th,
+.preference-table td {
+  border: 1px solid #ccc;
+  padding: 15px;
+  text-align: center;
+  font-size: 40px;
+}
+
+.preference-table th {
+  background-color: #555;
+  color: white;
+}
+
+.preference-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.preference-table tr:nth-child(odd) {
+  background-color: #eaeaea;
+}
+
+.preference-table button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 30px;
+  border-radius: 5px;
+}
+
+.preference-table button:hover {
+  background-color: #45a049;
+}
