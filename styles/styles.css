@@ -1,0 +1,248 @@
+@import url("reset.css");
+
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    --text-color-light: #ffffff;
+    --text-color-dark: #333333;
+    --border-color: #cccccc;
+    --background: #ffffff;
+    --backfill-light: #f9f9f9;
+    --backfill-dark: #555555;
+    --confirm-color: #58be5c;
+    --button: #ececec;
+    --link: #888888;
+    --link-hover: #d0d0d0;
+    --link-active: #444444;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px 20px 10px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+header img {
+    width: 150px;
+    height: auto;
+}
+
+nav {
+    align-self: end;
+    display: flex;
+    gap: 1em;
+}
+
+nav a {
+    text-decoration: none;
+    color: var(--text-color-dark);
+
+}
+
+body {
+    background: var(--background);
+    color: var(--text-color-dark);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: 2rem;
+    transition: all ease 250ms;
+}
+
+main {
+    padding: 2em 0em;
+    display: flex;
+    flex-direction: column;
+}
+
+main section {
+    padding-bottom: 2em;
+    margin-bottom: 2em;
+    border-bottom: 1px solid var(--border-color);
+}
+
+main div {
+    margin-bottom: 1em;
+}
+
+#course-header {
+    padding: 12px;
+    width: 100%;
+    border: 1px solid var(--border-color);
+    background-color: var(--backfill-light);
+    border-radius: 6px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 1em;
+}
+
+h2 {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 1.5em;
+}
+
+h3 {
+    font-size: 1.2em;
+}
+
+h4 {
+    font-size: 1em;
+}
+
+.search-bar {
+    display: flex;
+    gap: 5em;
+}
+
+.search-bar div {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+}
+
+.search-bar input[type="input"] {
+    padding: 8px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    width: 200px;
+}
+
+.submit-button {
+    width: 100%;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--background);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+thead {
+    background-color: var(--backfill-dark);
+    color: var(--text-color-light);
+}
+
+thead th {
+    padding: 12px 20px;
+    font-size: 1rem;
+    text-align: left;
+}
+
+tbody tr {
+    border-bottom: 1px solid var(--border-color);
+}
+
+tbody tr:hover {
+    background-color: var(--backfill-light);
+}
+
+tbody td {
+    padding: 12px 20px;
+    font-size: 1rem;
+    text-align: left;
+}
+
+select {
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+    background-color: var(--backfill-light);
+    transition: all 0.2s ease;
+}
+
+select:hover,
+select:focus {
+    border-color: var(--backfill-dark);
+    outline: none;
+}
+
+#courses-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.course-card {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    justify-content: space-between;
+    background: var(--backfill-light);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+button {
+    background-color: var(--button);
+    padding: 10px 20px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+button:hover {
+    background: var(--confirm-color);
+    color: var(--text-color-light);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.grades-button:hover,
+.user button:hover {
+    background: var(--link-hover);
+    color: var(--text-color-dark);
+}
+
+button:active {
+    background-color: #d0d0d0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.users-login {
+    align-self: center;
+    background: var(--backfill-light);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    width: 400px;
+}
+
+.user button {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.user {
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 8px;
+    margin: 5px 0;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+}
+
+label {
+    margin: 5px 0;
+    display: block;
+    font-weight: bold;
+}
+
+.hide-login {
+    display: none;
+}

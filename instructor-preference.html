@@ -4,18 +4,20 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Instructor Preference</title>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="styles/styles.css" />
   </head>
 
   <body>
     <header>
+      <img src="media/QULogo.png" alt="QU Logo" />
       <nav>
-        <a class="courses-link" href="student-courses.html">Courses</a>
+        <a href="instructor-main.html">Courses</a>
+        <a href="login.html">Logout</a>
       </nav>
     </header>
     <main>
-      <div class="preference-main">
-        <div class="courses-categories">
+      <section>
+        <div class="search-bar">
             <div>
               <label for="course-name">Course</label>
               <input type="input" id="course-name" name="course-name" placeholder="Search by Course Name"/>
@@ -25,10 +27,10 @@
               <input type="input" id="course-category" name="course-category" placeholder="Search by Course Category"/>
             </div>
         </div>
-        <div class="course-category-btn">
-          <button>Submit</button>
+        <div>
+          <button class="submit-button">Submit</button>
         </div>
-        <div class="preference-table">
+        <div>
           <table>
             <thead>
               <tr>
@@ -45,10 +47,16 @@
                 <td>1234</td>
                 <td><button>Interested</button></td>
               </tr>
+              <tr>
+                <td>Course1</td>
+                <td>Computer Science</td>
+                <td>1234</td>
+                <td><button>Interested</button></td>
+              </tr>
             </tbody>
           </table>
         </div>
-      </div>
+      </section>
     </main>
     <footer>
       <h4>Copyright &copy; Qatar University</h4>
