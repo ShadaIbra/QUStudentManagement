@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login</title>
   <link rel="stylesheet" href="styles/styles.css" />
+  <script src="login.js"></script>
 </head>
 
 <body>
@@ -15,8 +16,8 @@
   <main>
     <section class="users-login">
       <section class="user">
-        <button>Student</button>
-        <div class="hide-login">
+        <button id="student">Student</button>
+        <div id="student-login" class="user-login">
           <div>
             <label for="email">Email</label>
             <input type="email" id="email" name="email" placeholder="email@qu.edu.qa" required />
@@ -28,8 +29,8 @@
         </div>
       </section>
       <section class="user">
-        <button>Administrator</button>
-        <div class="show-login">
+        <button id="admin">Administrator</button>
+        <div id="admin-login" class="user-login">
           <div>
             <label for="email">Email</label>
             <input type="email" id="email" name="email" placeholder="email@qu.edu.qa" required />
@@ -41,8 +42,8 @@
         </div>
       </section>
       <section class="user">
-        <button>Instructor</button>
-        <div class="hide-login">
+        <button id="instructor">Instructor</button>
+        <div id="instructor-login" class="user-login">
           <div>
             <label for="email">Email</label>
             <input type="email" id="email" name="email" placeholder="email@qu.edu.qa" required />
