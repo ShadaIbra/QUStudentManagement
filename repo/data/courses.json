@@ -6,6 +6,7 @@
         "instructor": "Shada",
         "takenSeats": 2,
         "totalSeats" : 20,
+        "prereqsCRN" : ["2222"],
         "available": true
     },
     {
@@ -15,6 +16,7 @@
         "instructor": "Adiba",
         "takenSeats": 2,
         "totalSeats" : 20,
+        "prereqsCRN" : [],
         "available": false
     },
     {
@@ -24,6 +26,7 @@
         "instructor": "Hala",
         "takenSeats": 2,
         "totalSeats" : 20,
+        "prereqsCRN" : [],
         "available": false
     },
     {
@@ -33,6 +36,7 @@
         "instructor": "Yara",
         "takenSeats": 5,
         "totalSeats" : 20,
+        "prereqsCRN" : [],
         "available": true
     }
 ]

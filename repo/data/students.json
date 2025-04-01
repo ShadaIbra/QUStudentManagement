@@ -1,8 +1,17 @@
 [
     {
         "email": "s123@gmail.com",
-        "pendingCoursesCRN": ["1111", "4444"],
-        "inProgressCoursesCRN": ["2222"],
-        "completedCoursesCRN": ["3333"]
+        "pendingCRN": [
+            "1111"
+        ],
+        "inProgressCRN": [
+            "2222"
+        ],
+        "completedCourses": [
+            {
+                "crn": "22223",
+                "grade": "A"
+            }
+        ]
     }
 ]
