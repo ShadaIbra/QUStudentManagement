@@ -31,6 +31,32 @@ document.addEventListener("DOMContentLoaded", async function () {
         hideLogin(usersToHide);
     }
 
+    async function checkLogin(event) {
+        event.preventDefault();
+ 
+        const form = event.target;
+        const formData = new FormData(form);
+       
+        const email = formData.get("email");
+        const password = formData.get("password");
+        const res = await fetch('repo/data/users.json'); // adjust path if needed
+       
+        const users = await res.json();
+       
+        const match = users.find(user => user.email === email && user.password === password);
+        if (match) {
+ 
+            localStorage.setItem("loggedInUser", JSON.stringify(match));
+     
+     
+            window.location.href = "student-main.html";
+          }
+
+      }
+
+      document.querySelectorAll("form.user-login").forEach(form => {
+        form.addEventListener("submit", checkLogin);
+      });
     document.querySelector("#student").addEventListener('click', handleUserLogin);
     document.querySelector("#admin").addEventListener('click', handleUserLogin);
     document.querySelector("#instructor").addEventListener('click', handleUserLogin);
