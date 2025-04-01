@@ -1,0 +1,38 @@
+[
+    {
+        "courseName": "JavaScript",
+        "category": "Web Development",
+        "crn": "1111",
+        "instructor": "Shada",
+        "takenSeats": 2,
+        "totalSeats" : 20,
+        "available": true
+    },
+    {
+        "courseName": "JavaScript",
+        "category": "Web Development",
+        "crn": "2222",
+        "instructor": "Shada",
+        "takenSeats": 2,
+        "totalSeats" : 20,
+        "available": false
+    },
+    {
+        "courseName": "JavaScript",
+        "category": "Web Development",
+        "crn": "3333",
+        "instructor": "Shada",
+        "takenSeats": 2,
+        "totalSeats" : 20,
+        "available": false
+    },
+    {
+        "courseName": "JavaScript",
+        "category": "Web Development",
+        "crn": "4444",
+        "instructor": "Shada",
+        "takenSeats": 5,
+        "totalSeats" : 20,
+        "available": true
+    }
+]
