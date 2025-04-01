@@ -94,12 +94,13 @@ h4 {
     font-size: 1em;
 }
 
-.search-bar {
-    display: flex;
-    gap: 5em;
+.search-section {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1em;
 }
 
-.search-bar div {
+.search-bar {
     display: flex;
     align-items: center;
     gap: 1em;
@@ -109,7 +110,7 @@ h4 {
     padding: 8px;
     border: 1px solid var(--border-color);
     border-radius: 5px;
-    width: 200px;
+    width: 100%;
 }
 
 .submit-button {
@@ -197,7 +198,8 @@ button:hover {
 }
 
 .grades-button:hover,
-.user button:hover {
+.user button:hover,
+.search-section button:hover {
     background: var(--link-hover);
     color: var(--text-color-dark);
 }
@@ -205,6 +207,11 @@ button:hover {
 button:active {
     background-color: #d0d0d0;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+button.registered {
+    background-color: var(--confirm-color);
+    color: var(--text-color-light);
 }
 
 .users-login {

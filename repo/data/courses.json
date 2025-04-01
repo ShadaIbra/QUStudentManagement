@@ -12,7 +12,7 @@
         "courseName": "JavaScript",
         "category": "Web Development",
         "crn": "2222",
-        "instructor": "Shada",
+        "instructor": "Adiba",
         "takenSeats": 2,
         "totalSeats" : 20,
         "available": false
@@ -21,16 +21,16 @@
         "courseName": "JavaScript",
         "category": "Web Development",
         "crn": "3333",
-        "instructor": "Shada",
+        "instructor": "Hala",
         "takenSeats": 2,
         "totalSeats" : 20,
         "available": false
     },
     {
-        "courseName": "JavaScript",
-        "category": "Web Development",
+        "courseName": "OOP",
+        "category": "Programming",
         "crn": "4444",
-        "instructor": "Shada",
+        "instructor": "Yara",
         "takenSeats": 5,
         "totalSeats" : 20,
         "available": true
