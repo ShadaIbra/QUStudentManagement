@@ -36,7 +36,7 @@
         "category": "Programming",
         "crn": "4444",
         "instructor": "Yara",
-        "takenSeats": 20,
+        "takenSeats": 19,
         "totalSeats": 20,
         "prereqsCRN": [],
         "available": true

@@ -57,17 +57,6 @@ document.addEventListener("DOMContentLoaded", async function () {
             course.prereqsCRN.every(crn => passedCourses.includes(crn));
 
         const seatsRemaining = course.totalSeats - course.takenSeats;
-
-        if (!hasPassedPrereqs) {
-            alert("You cannot register for this course. You must complete all prerequisites.");
-            return;
-        }
-
-        if (seatsRemaining <= 0) {
-            alert("You cannot register for this course. There are no seats available.");
-            return;
-        }
-
         const registerButton = event.target;
 
         if (registerButton.classList.contains("registered")) {
@@ -76,16 +65,31 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             //crud remove
 
+            course.takenSeats -= 1;
+
             const index = student.pendingCRN.indexOf(course.crn);
             if (index !== -1) {
                 student.pendingCRN.splice(index, 1);
             }
 
         } else {
+
+            if (!hasPassedPrereqs) {
+                alert("You cannot register for this course. You must complete all prerequisites.");
+                return;
+            }
+
+            if (seatsRemaining <= 0) {
+                alert("You cannot register for this course. There are no seats available.");
+                return;
+            }
+
             registerButton.classList.add("registered");
             registerButton.innerText = "Registered";
 
             //crud add
+
+            course.takenSeats += 1;
 
             if (!student.pendingCRN.includes(course.crn)) {
                 student.pendingCRN.push(course.crn);
