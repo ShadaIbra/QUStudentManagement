@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
     }
 
-    function handleUserLogin(event) {
+    function handleUserChoice(event) {
         const usersToHide = []
         const users = document.querySelectorAll(".user-login");
         const selectedUserId = event.target.id + "-login";
@@ -23,7 +23,6 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         }
         hideLogin(usersToHide)
-
     }
 
     function initializeLogin() {
@@ -31,37 +30,49 @@ document.addEventListener("DOMContentLoaded", async function () {
         hideLogin(usersToHide);
     }
 
-    async function checkLogin(event) {
+    async function handleUserLogin(event) {
         event.preventDefault();
- 
+
         const form = event.target;
         const formData = new FormData(form);
-       
+
+        const userType = event.target.id.replace(/\s*-login$/, "");
+
         const email = formData.get("email");
         const password = formData.get("password");
-        const res = await fetch('repo/data/users.json'); // adjust path if needed
-       
+        const res = await fetch('repo/data/users.json');
+
         const users = await res.json();
-       
-        const match = users.find(user => user.email === email && user.password === password);
+
+        const match = users.find(user =>
+            user.email === email &&
+            user.password === password &&
+            user.userType === userType
+        );
+
         if (match) {
- 
             localStorage.setItem("loggedInUser", JSON.stringify(match));
-     
-     
-            window.location.href = "student-main.html";
-          }
+            if (userType === "student") {
+                window.location.href = "student-main.html";
+            }
+            else if (userType === "admin") {
+                window.location.href = "admin-main.html";
+            }
+            else if (userType === "instructor") {
+                window.location.href = "instructor-main.html";
+            }
+        }
 
-      }
+    }
 
-      document.querySelectorAll("form.user-login").forEach(form => {
-        form.addEventListener("submit", checkLogin);
-      });
-    document.querySelector("#student").addEventListener('click', handleUserLogin);
-    document.querySelector("#admin").addEventListener('click', handleUserLogin);
-    document.querySelector("#instructor").addEventListener('click', handleUserLogin);
+    document.querySelectorAll(".user > button").forEach(form => {
+        form.addEventListener('click', handleUserChoice);
+    });
+
+    document.querySelectorAll("form.user-login").forEach(form => {
+        form.addEventListener("submit", handleUserLogin);
+    });
 
     initializeLogin();
-
 
 });
