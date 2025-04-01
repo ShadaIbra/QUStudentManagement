@@ -222,10 +222,29 @@ button:active {
     margin-bottom: 20px;
 }
 
+#instructor {
+    margin-bottom: 0px;
+}
+
+#instructor-login {
+    margin-top: 20px;
+}
+
 .user {
     border-bottom: none;
     padding-bottom: 0;
     margin-bottom: 0;
+}
+
+.user button[type="submit"] {
+    background-color: #007bff;
+    color: var(--text-color-light);
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.user button[type="submit"]:hover {
+    background-color: #0069d9;
 }
 
 input[type="email"],
