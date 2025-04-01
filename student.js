@@ -35,54 +35,63 @@ document.addEventListener("DOMContentLoaded", async function () {
         registerButton.innerText = "Register";
         buttonCol.appendChild(registerButton);
 
-        if (student.pendingCRN.includes(course.crn)){
+        if (student.pendingCRN.includes(course.crn)) {
             registerButton.classList.add("registered");
             registerButton.innerText = "Registered";
         };
 
-        registerButton.addEventListener("click", event => handleRegister(event, course.crn));
+        registerButton.addEventListener("click", event => handleRegister(event, course));
 
 
         return tableRow;
     }
 
-    function handleRegister(event, courseCRN) {
+    function handleRegister(event, course) {
 
         const passingGrades = ["A", "B+", "B", "C+", "C", "D"];
 
         const passedCourses = student.completedCourses.filter(course => passingGrades.includes(course.grade)).map(course => course.crn);
 
-        const course = getCourse(courseCRN);
-
         const hasPassedPrereqs =
             course.prereqsCRN.length === 0 ||
             course.prereqsCRN.every(crn => passedCourses.includes(crn));
 
-        if (hasPassedPrereqs) {
-            const registerButton = event.target;
+        const seatsRemaining = course.totalSeats - course.takenSeats;
 
-            if (registerButton.classList.contains("registered")) {
-                registerButton.classList.remove("registered");
-                registerButton.innerText = "Register";
+        if (!hasPassedPrereqs) {
+            alert("You cannot register for this course. You must complete all prerequisites.");
+            return;
+        }
 
-                //crud remove
+        if (seatsRemaining <= 0) {
+            alert("You cannot register for this course. There are no seats available.");
+            return;
+        }
 
-                const index = student.pendingCRN.indexOf(courseCRN);
-                if (index !== -1) {
-                    student.pendingCRN.splice(index, 1);
-                }
+        const registerButton = event.target;
 
-            } else {
-                registerButton.classList.add("registered");
-                registerButton.innerText = "Registered";
+        if (registerButton.classList.contains("registered")) {
+            registerButton.classList.remove("registered");
+            registerButton.innerText = "Register";
 
-                //crud add
+            //crud remove
 
-                if (!student.pendingCRN.includes(courseCRN)) {
-                    student.pendingCRN.push(courseCRN);
-                }
+            const index = student.pendingCRN.indexOf(courseCRN);
+            if (index !== -1) {
+                student.pendingCRN.splice(index, 1);
+            }
+
+        } else {
+            registerButton.classList.add("registered");
+            registerButton.innerText = "Registered";
+
+            //crud add
+
+            if (!student.pendingCRN.includes(courseCRN)) {
+                student.pendingCRN.push(courseCRN);
             }
         }
+
     }
 
     function renderCourses(courses) {
@@ -101,10 +110,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         return courses.filter(course => course.available);
     }
 
-    function getCourse(crn) {
-        return courses.find(course => course.crn === crn);
-    }
-
     async function getStudent() {
         const res = await fetch('repo/data/students.json');
         const students = await res.json();
@@ -121,6 +126,16 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         renderCourses(filteredCourses);
     }
+
+    function displayLearningPath(){
+        const pendingTable = document.querySelector("tbody");
+
+
+
+    }
+
+
+
 
     document.querySelector("#search-btn").addEventListener("click", searchCourses);
 
