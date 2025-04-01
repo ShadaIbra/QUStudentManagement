@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Student Courses</title>
   <link rel="stylesheet" href="styles/styles.css" />
-  <script src="student.js"></script>
+  <script src="student-courses.js"></script>
 </head>
 
 <body>
@@ -14,11 +14,11 @@
     <img src="media/QULogo.png" alt="QU Logo" />
     <nav>
       <a href="student-main.html">Home</a>
-      <a href="login.html">Logout</a>
+      <a id="logout-btn">Logout</a>
     </nav>
   </header>
   <main>
-    <section id="pending-courses" class="courses-table">
+    <section class="courses-table">
       <h2>Pending Courses</h2>
       <table>
         <thead>
@@ -29,17 +29,17 @@
             <th>Instructor</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
+        <tbody id="pending-courses">
+          <!-- <tr>
             <td>Course1</td>
             <td>Computer Science</td>
             <td>1234</td>
             <td>Shada</td>
-          </tr>
+          </tr> -->
         </tbody>
       </table>
     </section>
-    <section id="in-progress-courses" class="courses-table">
+    <section class="courses-table">
       <h2>In Progress</h2>
       <table>
         <thead>
@@ -50,17 +50,17 @@
             <th>Instructor</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
+        <tbody id="in-progress-courses">
+          <!-- <tr>
             <td>Course1</td>
             <td>Computer Science</td>
             <td>1234</td>
             <td>Shada</td>
-          </tr>
+          </tr> -->
         </tbody>
       </table>
     </section>
-    <section id="completed-courses" class="courses-table">
+    <section class="courses-table">
       <h2>Completed Courses</h2>
       <table>
         <thead>
@@ -72,14 +72,14 @@
             <th>Grade</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
+        <tbody id="completed-courses">
+          <!-- <tr>
             <td>Course1</td>
             <td>Computer Science</td>
             <td>1234</td>
             <td>Shada</td>
             <td>A</td>
-          </tr>
+          </tr> -->
         </tbody>
       </table>
     </section>
