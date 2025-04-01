@@ -5,8 +5,10 @@
         "crn": "1111",
         "instructor": "Shada",
         "takenSeats": 2,
-        "totalSeats" : 20,
-        "prereqsCRN" : ["2222"],
+        "totalSeats": 20,
+        "prereqsCRN": [
+            "2222"
+        ],
         "available": true
     },
     {
@@ -15,8 +17,8 @@
         "crn": "2222",
         "instructor": "Adiba",
         "takenSeats": 2,
-        "totalSeats" : 20,
-        "prereqsCRN" : [],
+        "totalSeats": 20,
+        "prereqsCRN": [],
         "available": false
     },
     {
@@ -25,8 +27,8 @@
         "crn": "3333",
         "instructor": "Hala",
         "takenSeats": 2,
-        "totalSeats" : 20,
-        "prereqsCRN" : [],
+        "totalSeats": 20,
+        "prereqsCRN": [],
         "available": false
     },
     {
@@ -35,8 +37,8 @@
         "crn": "4444",
         "instructor": "Yara",
         "takenSeats": 20,
-        "totalSeats" : 20,
-        "prereqsCRN" : [],
+        "totalSeats": 20,
+        "prereqsCRN": [],
         "available": true
     }
 ]

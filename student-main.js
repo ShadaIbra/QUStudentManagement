@@ -76,7 +76,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             //crud remove
 
-            const index = student.pendingCRN.indexOf(courseCRN);
+            const index = student.pendingCRN.indexOf(course.crn);
             if (index !== -1) {
                 student.pendingCRN.splice(index, 1);
             }
@@ -87,8 +87,8 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             //crud add
 
-            if (!student.pendingCRN.includes(courseCRN)) {
-                student.pendingCRN.push(courseCRN);
+            if (!student.pendingCRN.includes(course.crn)) {
+                student.pendingCRN.push(course.crn);
             }
         }
 
@@ -127,23 +127,16 @@ document.addEventListener("DOMContentLoaded", async function () {
         renderCourses(filteredCourses);
     }
 
-    function displayLearningPath(){
-        const pendingTable = document.querySelector("tbody");
-
-
-
-    }
-
-
-
-
     document.querySelector("#search-btn").addEventListener("click", searchCourses);
+
+    document.querySelector("#logout-btn").addEventListener("click", function () {
+        localStorage.removeItem("loggedInUser");
+        window.location.href = "login.html";
+    });
 
     student = await getStudent();
 
     courses = await loadCourses();
     renderCourses(courses);
-
-
 
 });
