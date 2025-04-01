@@ -1,3 +1,17 @@
-[{"email": "a123@gmail.com",
-"password":"1234",
-"userType":"student"}] 
+[
+    {
+        "email": "s123@gmail.com",
+        "password": "1234",
+        "userType": "student"
+    },
+    {
+        "email": "a123@gmail.com",
+        "password": "1234",
+        "userType": "admin"
+    },
+    {
+        "email": "i123@gmail.com",
+        "password": "1234",
+        "userType": "instructor"
+    }
+]
