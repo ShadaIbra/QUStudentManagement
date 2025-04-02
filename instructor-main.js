@@ -2,15 +2,19 @@ document.addEventListener("DOMContentLoaded", async function () {
     
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
     const instructors = await fetch('repo/data/instructors.json').then(res => res.json());
-    let courses = []; //we add the courses to this array for current instructor
+    const courses = await fetch('repo/data/courses.json').then(res => res.json());
     
+    function getInstructorDetails() {
+        return instructors.find(i => i.email === loggedInUser.email);
+    }
+
 
  
     //only gets courses that are for the current logged in instrctor
     function getInstructorCourses() {
-        const instructor = instructors.find(i => i.email === loggedInUser.email);
+        const instructor = getInstructorDetails();
         if (instructor) {
-            return instructor.courses; // Return the courses for the logged-in instructor
+            return courses.filter(course => course.instructor === instructor.name);  // Return the courses for the logged-in instructor
         }
         return [];
     }
