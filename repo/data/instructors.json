@@ -2,81 +2,25 @@
     {
         "email": "i123@gmail.com",
         "name": "Shada",
-        "expertiseAreas": ["Web Development", "JavaScript", "Frontend"],
-        "courses": [
-            {
-                "crn": "1111",
-                "courseName": "JavaScript",
-                "category": "Web Development",
-                "instructor": "Shada",
-                "takenSeats": 2,
-                "totalSeats": 20,
-                "prereqsCRN": [
-                    "2222"
-                ],
-                "available": true
-            },
-            {
-                "crn": "4444",
-                "courseName": "OOP",
-                "category": "Programming",
-                "instructor": "Shada",
-                "takenSeats": 19,
-                "totalSeats": 20,
-                "prereqsCRN": [],
-                "available": true
-            }
-        ]
+        "expertiseAreas": ["Web Development", "JavaScript", "Frontend"]
+        
     },
     {
         "email": "i124@gmail.com",
         "name": "Adiba",
-        "expertiseAreas": ["Web Development", "JavaScript", "Backend"],
-        "courses": [
-            {
-                "crn": "2222",
-                "courseName": "JavaScript",
-                "category": "Web Development",
-                "instructor": "Adiba",
-                "takenSeats": 2,
-                "totalSeats": 20,
-                "prereqsCRN": [],
-                "available": false
-            }
-        ]
+        "expertiseAreas": ["Web Development", "JavaScript", "Backend"]
+        
     },
     {
         "email": "i125@gmail.com",
         "name": "Hala",
-        "expertiseAreas": ["Programming", "Data Structures", "Algorithms"],
-        "courses": [
-            {
-                "crn": "3333",
-                "courseName": "JavaScript",
-                "category": "Web Development",
-                "instructor": "Hala",
-                "takenSeats": 2,
-                "totalSeats": 20,
-                "prereqsCRN": [],
-                "available": false
-            }
-        ]
+        "expertiseAreas": ["Programming", "Data Structures", "Algorithms"]
+        
     },
     {
         "email": "i126@gmail.com",
         "name": "Yara",
-        "expertiseAreas": ["Object-Oriented Programming", "Java", "Software Engineering"],
-        "courses": [
-            {
-                "crn": "4444",
-                "courseName": "OOP",
-                "category": "Programming",
-                "instructor": "Yara",
-                "takenSeats": 19,
-                "totalSeats": 20,
-                "prereqsCRN": [],
-                "available": true
-            }
-        ]
+        "expertiseAreas": ["Object-Oriented Programming", "Java", "Software Engineering"]
+        
     }
 ]
