@@ -13,5 +13,20 @@
         "email": "i123@gmail.com",
         "password": "1234",
         "userType": "instructor"
+    },
+    {
+        "email": "i124@gmail.com",
+        "password": "1234",
+        "userType": "instructor"
+    },
+    {
+        "email": "i125@gmail.com",
+        "password": "1234",
+        "userType": "instructor"
+    },
+    {
+        "email": "i126@gmail.com",
+        "password": "1234",
+        "userType": "instructor"
     }
 ]
