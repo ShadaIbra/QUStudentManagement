@@ -33,13 +33,14 @@ document.addEventListener("DOMContentLoaded", async function () {
                 <h3>${course.courseName}</h3>
                 <h4>${course.category}</h4>
                 <h4>CRN: ${course.crn}</h4>
-                <button class="grades-button" onclick="goToGradesPage('${course.crn}')">Grades</button>
+                <button class="grades-button" data-crn="${course.crn}">Grades</button>
             </div>
         `).join('');
+        
     }
     function goToGradesPage(crn) {
-        // to the grades page with specific CRN as parameter
-        window.location.href = `instructor-grades.html?crn=${crn}`;
+        localStorage.setItem("currentCRN", crn);  // Store the CRN in localStorage
+    window.location.href = "instructor-grades.html"; 
     }
     
     document.querySelector("#logout-btn").addEventListener("click", function () {
@@ -50,7 +51,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     document.querySelector("#courses-cards").addEventListener("click", function (event) {
     if (event.target.classList.contains("grades-button")) {
         const crn = event.target.getAttribute("data-crn");
-        window.location.href = `instructor-grades.html?crn=${crn}`;
+        
+        goToGradesPage(crn);
 
     }
 });

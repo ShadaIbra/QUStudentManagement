@@ -5,6 +5,11 @@
         "userType": "student"
     },
     {
+        "email": "s124@gmail.com",
+        "password": "1234",
+        "userType": "student"
+    },
+    {
         "email": "a123@gmail.com",
         "password": "1234",
         "userType": "admin"

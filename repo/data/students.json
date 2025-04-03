@@ -14,5 +14,20 @@
                 "grade": "A"
             }
         ]
+    },
+    {
+        "email": "s124@gmail.com",
+        "pendingCRN": [
+            "5555"
+        ],
+        "inProgressCRN": [
+            "4444"
+        ],
+        "completedCourses": [
+            {
+                "crn": "3333",
+                "grade": "B"
+            }
+        ]
     }
 ]
