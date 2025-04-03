@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
     function goToGradesPage(crn) {
         localStorage.setItem("currentCRN", crn);  // Store the CRN in localStorage
-    window.location.href = "instructor-grades.html"; 
+        window.location.href = `instructor-grades.html?crn=${crn}`; 
     }
     
     document.querySelector("#logout-btn").addEventListener("click", function () {

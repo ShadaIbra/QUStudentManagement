@@ -63,6 +63,15 @@ document.addEventListener("DOMContentLoaded", async function () {
         }).join('');
     }
 
+    document.querySelectorAll('select[name="grades"]').forEach(select => {
+        select.addEventListener('change', function () {
+            const studentEmail = select.closest('tr').querySelector('td').textContent;
+            const newGrade = select.value;
+            console.log(`New grade for ${studentEmail}: ${newGrade}`);
+            // Here you would need to update the student's grade in your data or database
+        });
+    });
+    
     // Log out functionality to remove the logged-in instructor and redirect to the login page
     document.querySelector("#logout-btn").addEventListener("click", function () {
         localStorage.removeItem("loggedInInstructor");
