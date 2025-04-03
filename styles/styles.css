@@ -272,3 +272,7 @@ label {
 .hide-login {
     display: none;
 }
+.interested {
+    background-color: var(--confirm-color);
+    color: white;
+}

@@ -40,5 +40,25 @@
         "totalSeats": 20,
         "prereqsCRN": [],
         "available": true
+    },
+    {
+        "courseName": "AI Basics",
+        "category": "Artificial Intelligence",
+        "crn": "5555",
+        "instructor": "",
+        "takenSeats": 5,
+        "totalSeats": 30,
+        "prereqsCRN": [],
+        "available": true
+    },
+    {
+        "courseName": "Data Structures",
+        "category": "Computer Science",
+        "crn": "6666",
+        "instructor": null,
+        "takenSeats": 10,
+        "totalSeats": 25,
+        "prereqsCRN": [],
+        "available": true
     }
 ]
