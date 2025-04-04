@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", async function () {
 
-    const user = JSON.parse(localStorage.getItem("loggedInUser"));
+    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
 
     let courses = [];
     let student;
@@ -118,7 +118,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         const res = await fetch('repo/data/students.json');
         const students = await res.json();
 
-        return students.find(student => student.email === user.email);
+        return students.find(student => student.email === loggedInUser.email);
     }
 
     function searchCourses() {
