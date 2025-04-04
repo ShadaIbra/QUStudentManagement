@@ -5,6 +5,14 @@ document.addEventListener("DOMContentLoaded", async function () {
     let courses = [];
     let student;
 
+    function saveCoursesToLocalStorage() {
+        localStorage.setItem("courses", JSON.stringify(courses));
+    }
+
+    function saveStudentToLocalStorage() {
+        localStorage.setItem("student", JSON.stringify(student));
+    }
+
     function renderCourse(course) {
         const tableRow = document.createElement("tr");
 
@@ -42,14 +50,20 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         registerButton.addEventListener("click", event => handleRegister(event, course));
 
-
         return tableRow;
     }
 
+    function renderCourses(courses) {
+        const tableBody = document.querySelector("tbody");
+        tableBody.replaceChildren();
+
+        courses.forEach(course => {
+            tableBody.appendChild(renderCourse(course));
+        });
+    }
+
     function handleRegister(event, course) {
-
         const passingGrades = ["A", "B+", "B", "C+", "C", "D"];
-
         const passedCourses = student.completedCourses.filter(course => passingGrades.includes(course.grade)).map(course => course.crn);
 
         const hasPassedPrereqs =
@@ -62,18 +76,13 @@ document.addEventListener("DOMContentLoaded", async function () {
         if (registerButton.classList.contains("registered")) {
             registerButton.classList.remove("registered");
             registerButton.innerText = "Register";
-
-            //crud remove
-
             course.takenSeats -= 1;
 
             const index = student.pendingCRN.indexOf(course.crn);
             if (index !== -1) {
                 student.pendingCRN.splice(index, 1);
             }
-
         } else {
-
             if (!hasPassedPrereqs) {
                 alert("You cannot register for this course. You must complete all prerequisites.");
                 return;
@@ -86,39 +95,44 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             registerButton.classList.add("registered");
             registerButton.innerText = "Registered";
-
-            //crud add
-
             course.takenSeats += 1;
 
             if (!student.pendingCRN.includes(course.crn)) {
                 student.pendingCRN.push(course.crn);
             }
         }
-
-    }
-
-    function renderCourses(courses) {
-        const tableBody = document.querySelector("tbody");
-        tableBody.replaceChildren();
-
-        courses.forEach(course => {
-            tableBody.appendChild(renderCourse(course));
-        });
+        saveCoursesToLocalStorage();
+        saveStudentToLocalStorage();
+        renderCourses(courses)
     }
 
     async function loadCourses() {
-        const res = await fetch('repo/data/courses.json');
-        const courses = await res.json();
+        const saved = localStorage.getItem("courses");
+        if (saved) {
+            return JSON.parse(saved);
+        }
 
-        return courses.filter(course => course.available);
+        const res = await fetch("repo/data/courses.json");
+        const data = await res.json();
+        localStorage.setItem("courses", JSON.stringify(data));
+
+        return data.filter(course => course.available);
     }
 
     async function getStudent() {
-        const res = await fetch('repo/data/students.json');
-        const students = await res.json();
+        const saved = localStorage.getItem("student");
+        if (saved) {
+            return JSON.parse(saved);
+        }
 
-        return students.find(student => student.email === loggedInUser.email);
+        const res = await fetch("repo/data/students.json");
+        const students = await res.json();
+        const found = students.find(s => s.email === loggedInUser.email);
+
+        if (found) {
+            localStorage.setItem("student", JSON.stringify(found));
+        }
+        return found;
     }
 
     function searchCourses() {
@@ -139,8 +153,11 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
 
     student = await getStudent();
-
     courses = await loadCourses();
     renderCourses(courses);
+
+    // localStorage.removeItem("student");
+    // localStorage.removeItem("courses");
+
 
 });

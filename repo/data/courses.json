@@ -9,7 +9,8 @@
         "prereqsCRN": [
             "2222"
         ],
-        "available": true,
+        "available": false,
+        "validated": true,
         "preferenceList" : ["Shada"]
     },
     {
@@ -21,6 +22,7 @@
         "totalSeats": 20,
         "prereqsCRN": [],
         "available": false,
+        "validated":true,
         "preferenceList" : ["Shada"]
     },
     {
@@ -32,6 +34,7 @@
         "totalSeats": 20,
         "prereqsCRN": [],
         "available": false,
+        "validated":true,
         "preferenceList" : []
     },
     {
@@ -43,6 +46,7 @@
         "totalSeats": 20,
         "prereqsCRN": [],
         "available": true,
+        "validated":true,
         "preferenceList" : ["Shada"]
     },
     {
@@ -54,6 +58,7 @@
         "totalSeats": 30,
         "prereqsCRN": [],
         "available": true,
+        "validated":true,
         "preferenceList" : ["Shada"]
     },
     {
@@ -65,6 +70,7 @@
         "totalSeats": 25,
         "prereqsCRN": [],
         "available": true,
+        "validated":true,
         "preferenceList" : ["Shada"]
     }
 ]
