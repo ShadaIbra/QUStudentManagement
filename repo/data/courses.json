@@ -9,7 +9,8 @@
         "prereqsCRN": [
             "2222"
         ],
-        "available": true
+        "available": true,
+        "preferenceList" : ["Shada"]
     },
     {
         "courseName": "JavaScript",
@@ -19,17 +20,19 @@
         "takenSeats": 2,
         "totalSeats": 20,
         "prereqsCRN": [],
-        "available": false
+        "available": false,
+        "preferenceList" : ["Shada"]
     },
     {
         "courseName": "JavaScript",
         "category": "Web Development",
         "crn": "3333",
-        "instructor": "Hala",
+        "instructor": "",
         "takenSeats": 2,
         "totalSeats": 20,
         "prereqsCRN": [],
-        "available": false
+        "available": false,
+        "preferenceList" : []
     },
     {
         "courseName": "OOP",
@@ -39,7 +42,8 @@
         "takenSeats": 19,
         "totalSeats": 20,
         "prereqsCRN": [],
-        "available": true
+        "available": true,
+        "preferenceList" : ["Shada"]
     },
     {
         "courseName": "AI Basics",
@@ -49,7 +53,8 @@
         "takenSeats": 5,
         "totalSeats": 30,
         "prereqsCRN": [],
-        "available": true
+        "available": true,
+        "preferenceList" : ["Shada"]
     },
     {
         "courseName": "Data Structures",
@@ -59,6 +64,7 @@
         "takenSeats": 10,
         "totalSeats": 25,
         "prereqsCRN": [],
-        "available": true
+        "available": true,
+        "preferenceList" : ["Shada"]
     }
 ]

@@ -1,93 +1,122 @@
 document.addEventListener("DOMContentLoaded", async function () {
-    
-    const courses = await fetch('repo/data/courses.json').then(res => res.json());
 
-    // getting courses that have no instructor
-    let availableCourses = courses.filter(course => !course.instructor);
+    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
 
-    const tbody = document.querySelector("tbody");
-    const courseNameInput = document.querySelector("#course-name");
-    const courseCategoryInput = document.querySelector("#course-category");
+    let courses = [];
+    let instructor;
 
-    // storing interested cuorses 
-    const interestedCourses = new Set(JSON.parse(localStorage.getItem("interestedCourses")) || []);
+    function renderCourse(course) {
+        const tableRow = document.createElement("tr");
 
-  
-    function displayCourses(filteredCourses) {
-        if (filteredCourses.length === 0) {
-            tbody.innerHTML = "<tr><td colspan='4'>No available courses.</td></tr>";
-            return;
+        const courseName = document.createElement("td");
+        courseName.innerText = course.courseName;
+        tableRow.appendChild(courseName);
+
+        const courseCategory = document.createElement("td");
+        courseCategory.innerText = course.category;
+        tableRow.appendChild(courseCategory);
+
+        const courseCRN = document.createElement("td");
+        courseCRN.innerText = course.crn;
+        tableRow.appendChild(courseCRN);
+
+        const buttonCol = document.createElement("td");
+        tableRow.appendChild(buttonCol);
+
+        const interestButton = document.createElement("button");
+        interestButton.innerText = "Interest";
+        buttonCol.appendChild(interestButton);
+
+        if (!course.preferenceList) {
+            course.preferenceList = [];
         }
 
-        tbody.innerHTML = filteredCourses.map(course => `
-            <tr>
-                <td>${course.courseName}</td>
-                <td>${course.category}</td>
-                <td>${course.crn}</td>
-                <td>
-                    <button class="interest-btn ${interestedCourses.has(course.crn) ? 'interested' : ''}" 
-                        data-crn="${course.crn}">
-                        ${interestedCourses.has(course.crn) ? "Interested" : "Interest"}
-                    </button>
-                </td>
-            </tr>
-        `).join('');
+        if (course.preferenceList.includes(instructor.name)) {
+            interestButton.classList.add("interested");
+            interestButton.innerText = "Interested";
+        }
 
-        //fr button event listener
-        attachInterestEventListeners();
+        interestButton.addEventListener("click", (event) => handleInterest(event, course));
+
+
+        return tableRow;
     }
 
-    // dislaying courses according to search 
-    function filterCourses() {
-        const searchName = courseNameInput.value.toLowerCase();
-        const searchCategory = courseCategoryInput.value.toLowerCase();
+    function handleInterest(event, course) {
 
-        //going thro each of the avaialble courses to match their name n category to the search
-        //displays all avaialve course if no search
-        
-        const filteredCourses = availableCourses.filter(course => 
-            (searchName === "" || course.courseName.toLowerCase().includes(searchName)) &&
-            (searchCategory === "" || course.category.toLowerCase().includes(searchCategory))
-        );
+        const interestButton = event.target;
 
-        displayCourses(filteredCourses);
+        if (!course.preferenceList) {
+            course.preferenceList = [];
+        }
+
+        if (interestButton.classList.contains("interested")) {
+            interestButton.classList.remove("interested");
+            interestButton.innerText = "Interest";
+
+            //crud remove
+
+            const index = course.preferenceList.indexOf(instructor.name);
+            if (index !== -1) {
+                course.preferenceList.splice(index, 1);
+            }
+
+        } else {
+            interestButton.classList.add("interested");
+            interestButton.innerText = "Interested";
+
+            //crud add
+
+            if (!course.preferenceList.includes(instructor.name)) {
+                course.preferenceList.push(instructor.name);
+            }
+        }
+
     }
+    
+    function renderCourses(courses) {
+        const tableBody = document.querySelector("tbody");
+        tableBody.replaceChildren();
 
-    //  event listeners to interest buttons
-    function attachInterestEventListeners() {
-        document.querySelectorAll(".interest-btn").forEach(button => {
-            const crn = button.dataset.crn;
-
-            button.addEventListener("click", function () {
-                if (interestedCourses.has(crn)) {  //deselecting interest button
-                    interestedCourses.delete(crn);
-                    button.textContent = "Interest"; // Change text back
-                    button.classList.remove("interested"); // Remove green color
-                } else {                            //selecting interest button
-                    interestedCourses.add(crn);
-                    button.textContent = "Interested"; // Change text when selected
-                    button.classList.add("interested"); // Add green color
-                }
-            });
+        courses.forEach(course => {
+            tableBody.appendChild(renderCourse(course));
         });
     }
 
-    //when page first loads this called
-    displayCourses(availableCourses);
+    async function loadCourses() {
+        const res = await fetch('repo/data/courses.json');
+        const courses = await res.json();
 
-    // Event listeners for search inputs
-    courseNameInput.addEventListener("input", filterCourses);
-    courseCategoryInput.addEventListener("input", filterCourses);
+        return courses.filter(course => !course.instructor);
+    }
 
-    // Submit button: Save interested courses
-    document.querySelector(".submit-button").addEventListener("click", function () {
-        localStorage.setItem("interestedCourses", JSON.stringify([...interestedCourses]));
-        alert("Preferences saved!");
-    });
+    async function getInstructor() {
+        const res = await fetch('repo/data/instructors.json');
+        const instructors = await res.json();
 
-    // Logout functionality
+        return instructors.find(instructor => instructor.email === loggedInUser.email);
+    }
+
+    function searchCourses() {
+        const search = document.querySelector("#name-search").value.toLowerCase().trim();
+
+        const filteredCourses = courses.filter(course =>
+            course.courseName.toLowerCase().includes(search) ||
+            course.category.toLowerCase().includes(search));
+
+        renderCourses(filteredCourses);
+    }
+
+    document.querySelector("#search-btn").addEventListener("click", searchCourses);
+
     document.querySelector("#logout-btn").addEventListener("click", function () {
-        localStorage.removeItem("loggedInInstructor");
+        localStorage.removeItem("loggedInUser");
         window.location.href = "login.html";
     });
+
+    instructor = await getInstructor();
+
+    courses = await loadCourses();
+    renderCourses(courses);
+
 });
