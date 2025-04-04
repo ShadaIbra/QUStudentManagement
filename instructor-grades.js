@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     
     // Log out functionality to remove the logged-in instructor and redirect to the login page
     document.querySelector("#logout-btn").addEventListener("click", function () {
-        localStorage.removeItem("loggedInInstructor");
+        localStorage.removeItem("loggedInUser");
         window.location.href = "login.html";
     });
 });
