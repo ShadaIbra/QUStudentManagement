@@ -1,13 +1,13 @@
 document.addEventListener("DOMContentLoaded", async function () {
 
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-    const courses = await fetch('repo/data/courses.json').then(res => res.json());
-    
+    const courses = await fetch('data/courses.json').then(res => res.json());
+
     let instructor;
     let instructorCourses;
 
     async function getInstructor() {
-        const res = await fetch('repo/data/instructors.json');
+        const res = await fetch('data/instructors.json');
         const instructors = await res.json();
 
         return instructors.find(instructor => instructor.email === loggedInUser.email);
@@ -60,6 +60,10 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     instructor = await getInstructor();
     instructorCourses = getInstructorCourses();
+
+    console.log(instructor);
+    console.log(instructorCourses);
+
 
     displayInstructorCourses();
 

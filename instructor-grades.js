@@ -3,8 +3,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     const crn = urlParams.get('crn');  // getting CRN from the URL parameters thats called in instructor-main.js
 
     // Fetch courses and students data
-    const courses = await fetch('repo/data/courses.json').then(res => res.json());
-    const students = await fetch('repo/data/students.json').then(res => res.json());
+    const courses = await fetch('data/courses.json').then(res => res.json());
+    const students = await fetch('data/students.json').then(res => res.json());
 
     // Find the course by CRN
     const course = courses.find(c => c.crn === crn);

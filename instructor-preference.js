@@ -84,14 +84,14 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     async function loadCourses() {
-        const res = await fetch('repo/data/courses.json');
+        const res = await fetch('data/courses.json');
         const courses = await res.json();
 
         return courses.filter(course => !course.instructor);
     }
 
     async function getInstructor() {
-        const res = await fetch('repo/data/instructors.json');
+        const res = await fetch('data/instructors.json');
         const instructors = await res.json();
 
         return instructors.find(instructor => instructor.email === loggedInUser.email);
