@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         const email = formData.get("email");
         const password = formData.get("password");
-        const res = await fetch('repo/data/users.json');
+        const res = await fetch('data/users.json');
 
         const users = await res.json();
 

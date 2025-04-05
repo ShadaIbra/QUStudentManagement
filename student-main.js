@@ -1,16 +1,53 @@
 document.addEventListener("DOMContentLoaded", async function () {
-
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
 
     let courses = [];
     let student;
 
-    function saveCoursesToLocalStorage() {
+    function saveCourses() {
         localStorage.setItem("courses", JSON.stringify(courses));
     }
 
-    function saveStudentToLocalStorage() {
-        localStorage.setItem("student", JSON.stringify(student));
+    function saveStudents() {
+        const students = JSON.parse(localStorage.getItem("students"));
+        const index = students.findIndex(s => s.email === student.email);
+
+        if (index !== -1) {
+            students[index] = student;
+            localStorage.setItem("students", JSON.stringify(students));
+        }
+    }
+
+    async function loadCourses() {
+        const saved = localStorage.getItem("courses");
+        if (saved) {
+            return JSON.parse(saved);
+        }
+
+        const res = await fetch("data/courses.json");
+        let data = await res.json();
+        data = data.filter(course => course.available);
+
+        localStorage.setItem("courses", JSON.stringify(data));
+
+        return data;
+    }
+
+    async function loadStudents() {
+        const saved = localStorage.getItem("students");
+        if (saved) {
+            return JSON.parse(saved);
+        }
+
+        const res = await fetch("data/students.json");
+        const data = await res.json();
+        localStorage.setItem("students", JSON.stringify(data));
+        return data;
+    }
+
+    async function getStudent() {
+        const students = await loadStudents();
+        return students.find(s => s.email === loggedInUser.email);
     }
 
     function renderCourse(course) {
@@ -101,38 +138,9 @@ document.addEventListener("DOMContentLoaded", async function () {
                 student.pendingCRN.push(course.crn);
             }
         }
-        saveCoursesToLocalStorage();
-        saveStudentToLocalStorage();
+        saveCourses();
+        saveStudents();
         renderCourses(courses)
-    }
-
-    async function loadCourses() {
-        const saved = localStorage.getItem("courses");
-        if (saved) {
-            return JSON.parse(saved);
-        }
-
-        const res = await fetch("repo/data/courses.json");
-        const data = await res.json();
-        localStorage.setItem("courses", JSON.stringify(data));
-
-        return data.filter(course => course.available);
-    }
-
-    async function getStudent() {
-        const saved = localStorage.getItem("student");
-        if (saved) {
-            return JSON.parse(saved);
-        }
-
-        const res = await fetch("repo/data/students.json");
-        const students = await res.json();
-        const found = students.find(s => s.email === loggedInUser.email);
-
-        if (found) {
-            localStorage.setItem("student", JSON.stringify(found));
-        }
-        return found;
     }
 
     function searchCourses() {
@@ -156,8 +164,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     courses = await loadCourses();
     renderCourses(courses);
 
-    // localStorage.removeItem("student");
+    // localStorage.removeItem("students");
     // localStorage.removeItem("courses");
-
 
 });

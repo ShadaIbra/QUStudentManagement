@@ -6,14 +6,14 @@ document.addEventListener("DOMContentLoaded", async function () {
     let student;
 
     async function getStudent() {
-        const res = await fetch('repo/data/students.json');
+        const res = await fetch('data/students.json');
         const students = await res.json();
 
         return students.find(student => student.email === loggedInUser.email);
     }
 
     async function loadCourses() {
-        const res = await fetch('repo/data/courses.json');
+        const res = await fetch('data/courses.json');
         return await res.json();
 
     }
