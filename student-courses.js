@@ -1,32 +1,50 @@
 document.addEventListener("DOMContentLoaded", async function () {
 
-    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+  const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
 
-    let courses = [];
-    let student;
+  let courses = [];
+  let student;
 
-    async function getStudent() {
-        const res = await fetch('data/students.json');
-        const students = await res.json();
-
-        return students.find(student => student.email === loggedInUser.email);
+  async function loadStudents() {
+    const saved = localStorage.getItem("students");
+    if (saved) {
+      return JSON.parse(saved);
     }
 
-    async function loadCourses() {
-        const res = await fetch('data/courses.json');
-        return await res.json();
+    const res = await fetch("data/students.json");
+    const data = await res.json();
+    localStorage.setItem("students", JSON.stringify(data));
+    return data;
+  }
 
+  async function getStudent() {
+    const students = await loadStudents();
+    return students.find(s => s.email === loggedInUser.email);
+  }
+
+  async function loadCourses() {
+    const saved = localStorage.getItem("courses");
+    if (saved) {
+      return JSON.parse(saved);
     }
 
-    function getCourse(crn) {
-        return courses.find(course => course.crn === crn);
-    }
+    const res = await fetch("data/courses.json");
+    let data = await res.json();
+    data = data.filter(course => course.available);
 
-    function displayLearningPath() {
-        const pendingTable = document.querySelector("#pending-courses");
-        const pendingCourses = student.pendingCRN.map(crn => getCourse(crn));
+    localStorage.setItem("courses", JSON.stringify(data));
+    return data;
+  }
 
-        pendingTable.innerHTML = pendingCourses.map(course => `
+  function getCourse(crn) {
+    return courses.find(course => course.crn === crn);
+  }
+
+  function displayLearningPath() {
+    const pendingTable = document.querySelector("#pending-courses");
+    const pendingCourses = student.pendingCRN.map(crn => getCourse(crn));
+
+    pendingTable.innerHTML = pendingCourses.map(course => `
               <tr>
                 <td>${course.courseName}</td>
                 <td>${course.category}</td>
@@ -35,10 +53,10 @@ document.addEventListener("DOMContentLoaded", async function () {
               </tr>
             `).join('');
 
-        const inProgressTable = document.querySelector("#in-progress-courses");
-        const inProgressCourses = student.inProgressCRN.map(crn => getCourse(crn));
+    const inProgressTable = document.querySelector("#in-progress-courses");
+    const inProgressCourses = student.inProgressCRN.map(crn => getCourse(crn));
 
-        inProgressTable.innerHTML = inProgressCourses.map(course => `
+    inProgressTable.innerHTML = inProgressCourses.map(course => `
               <tr>
                 <td>${course.courseName}</td>
                 <td>${course.category}</td>
@@ -47,13 +65,13 @@ document.addEventListener("DOMContentLoaded", async function () {
               </tr>
             `).join('');
 
-        const completedTable = document.querySelector("#completed-courses");
-        const completedCourses = student.completedCourses.map(course => ({
-            course: getCourse(course.crn),
-            grade: course.grade
-        }));
+    const completedTable = document.querySelector("#completed-courses");
+    const completedCourses = student.completedCourses.map(course => ({
+      course: getCourse(course.crn),
+      grade: course.grade
+    }));
 
-        completedTable.innerHTML = completedCourses.map(courseDetails => `
+    completedTable.innerHTML = completedCourses.map(courseDetails => `
               <tr>
                 <td>${courseDetails.course.courseName}</td>
                 <td>${courseDetails.course.category}</td>
@@ -62,17 +80,21 @@ document.addEventListener("DOMContentLoaded", async function () {
                 <td>${courseDetails.grade}</td>
               </tr>
             `).join('');
-    }
+  }
 
-    student = await getStudent();
+  document.querySelector("#logout-btn").addEventListener("click", function () {
+    localStorage.removeItem("loggedInUser");
+    window.location.href = "login.html";
+  });
 
-    document.querySelector("#logout-btn").addEventListener("click", function () {
-        localStorage.removeItem("loggedInUser");
-        window.location.href = "login.html";
-    });
+  student = await getStudent();
+  courses = await loadCourses();
+  displayLearningPath();
 
-    courses = await loadCourses();
+  console.log(student);
+  console.log(courses);
 
-    displayLearningPath();
+  // localStorage.removeItem("students");
+  // localStorage.removeItem("courses");
 
 });

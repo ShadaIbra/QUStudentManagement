@@ -11,7 +11,9 @@
         ],
         "available": false,
         "validated": true,
-        "preferenceList" : ["Shada"]
+        "preferenceList": [
+            "Shada"
+        ]
     },
     {
         "courseName": "JavaScript",
@@ -22,8 +24,10 @@
         "totalSeats": 20,
         "prereqsCRN": [],
         "available": false,
-        "validated":true,
-        "preferenceList" : ["Shada"]
+        "validated": true,
+        "preferenceList": [
+            "Shada"
+        ]
     },
     {
         "courseName": "JavaScript",
@@ -34,8 +38,8 @@
         "totalSeats": 20,
         "prereqsCRN": [],
         "available": false,
-        "validated":true,
-        "preferenceList" : []
+        "validated": true,
+        "preferenceList": []
     },
     {
         "courseName": "OOP",
@@ -46,8 +50,10 @@
         "totalSeats": 20,
         "prereqsCRN": [],
         "available": true,
-        "validated":true,
-        "preferenceList" : ["Shada"]
+        "validated": true,
+        "preferenceList": [
+            "Shada"
+        ]
     },
     {
         "courseName": "AI Basics",
@@ -58,8 +64,10 @@
         "totalSeats": 30,
         "prereqsCRN": [],
         "available": true,
-        "validated":true,
-        "preferenceList" : ["Shada"]
+        "validated": true,
+        "preferenceList": [
+            "Shada"
+        ]
     },
     {
         "courseName": "Data Structures",
@@ -70,7 +78,9 @@
         "totalSeats": 25,
         "prereqsCRN": [],
         "available": true,
-        "validated":true,
-        "preferenceList" : ["Shada"]
+        "validated": true,
+        "preferenceList": [
+            "Shada"
+        ]
     }
 ]

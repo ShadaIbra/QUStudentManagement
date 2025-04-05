@@ -2,11 +2,9 @@
     {
         "email": "s123@gmail.com",
         "pendingCRN": [
-            "1111",
-            "2222"
         ],
         "inProgressCRN": [
-            "4444"
+            "3333"
         ],
         "completedCourses": [
             {
@@ -21,7 +19,7 @@
             "5555"
         ],
         "inProgressCRN": [
-            "4444",
+            "3333",
             "1111"
         ],
         "completedCourses": [

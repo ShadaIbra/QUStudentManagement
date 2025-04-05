@@ -5,6 +5,13 @@ document.addEventListener("DOMContentLoaded", async function () {
     let student;
 
     function saveCourses() {
+        const courses = JSON.parse(localStorage.getItem("courses"));
+
+        for (const course of courses) {
+            const index = courses.findIndex(c => c.crn === courses.crn);
+
+            courses[index] = course;
+        }
         localStorage.setItem("courses", JSON.stringify(courses));
     }
 
@@ -26,11 +33,14 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         const res = await fetch("data/courses.json");
         let data = await res.json();
-        data = data.filter(course => course.available);
-
         localStorage.setItem("courses", JSON.stringify(data));
 
         return data;
+    }
+
+    async function getAvailableCourses() {
+        const courses = await loadCourses();
+        return courses.filter(course => course.available);
     }
 
     async function loadStudents() {
@@ -161,10 +171,12 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
 
     student = await getStudent();
-    courses = await loadCourses();
+    courses = await getAvailableCourses();
     renderCourses(courses);
+
+    console.log(student);
+    console.log(loadCourses());
 
     // localStorage.removeItem("students");
     // localStorage.removeItem("courses");
-
 });
