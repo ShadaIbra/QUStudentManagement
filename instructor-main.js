@@ -45,6 +45,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     document.querySelector("#logout-btn").addEventListener("click", function () {
+        event.preventDefault();
         localStorage.removeItem("loggedInUser");
         window.location.href = "login.html";
     });
