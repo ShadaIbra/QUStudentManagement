@@ -204,6 +204,10 @@ button:hover {
     color: var(--text-color-dark);
 }
 
+.cancel-btn:hover {
+    background: #e63946;
+}
+
 button:active {
     background-color: #d0d0d0;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -212,6 +216,11 @@ button:active {
 button.registered {
     background-color: var(--confirm-color);
     color: var(--text-color-light);
+}
+
+.validate-btns {
+    display: flex;
+    gap: 10px;
 }
 
 .users-login {
