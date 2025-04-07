@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin Main</title>
     <link rel="stylesheet" href="styles/styles.css" />
+    <script src="admin-manage.js"></script>
 </head>
 
 <body>
@@ -21,30 +22,30 @@
             <h2>Add Course</h2>
             <form id="add-course-form">
                 <div>
-                    <label for="courseName">Course Name *</label>
-                    <input type="text" id="courseName" name="courseName" required />
+                    <label for="course-name">Course Name *</label>
+                    <input type="text" id="course-name" name="course-name" required />
                 </div>
                 <div>
                     <label for="category">Category *</label>
                     <select id="category" name="category" required>
-                        <option value="" disabled selected>Select a category</option>
-                        <option value="Web Development">Web Development</option>
+                        <!-- <option value="" disabled selected>Select a category</option> -->
+                        <!-- <option value="Web Development">Web Development</option> -->
                     </select>
                 </div>
                 <div>
                     <label for="crn">CRN *</label>
-                    <input type="text" id="crn" name="crn" required pattern="\\d+" />
+                    <input type="text" id="crn" name="crn" required pattern="\d{4}" placeholder="e.g. 1234" />
                 </div>
                 <div>
                     <label for="prereqs">Prerequisite Courses</label>
                     <select id="prereqs" name="prereqs" multiple>
-                        <option value="Web Development">Web Development</option>
-                        <option value="Computer Science">Computer Science</option>
+                        <!-- <option value="Web Development">Web Development</option>
+                        <option value="Computer Science">Computer Science</option> -->
                     </select>
                 </div>
                 <div>
-                    <label for="enablePref">Enable Preference List</label>
-                    <input type="checkbox" id="enablePref" />
+                    <label for="enable-pref">Enable Preference List</label>
+                    <input type="checkbox" id="enable-pref" />
                 </div>
                 <div>
                     <button type="submit">Add Course</button>
@@ -55,18 +56,27 @@
             <h2>Add Class</h2>
             <form id="add-class-form">
                 <div>
-                    <label for="ClassCrn">Course CRN *</label>
-                    <select id="ClassCrn" name="ClassCrn" required>
-                        <option value="" disabled selected>Select a Course</option>
-                        <option value="1234">1234</option>
+                    <label for="class-code">Class Code *</label>
+                    <input type="text" id="class-code" name="class-code" required pattern="\d{4}"
+                        placeholder="e.g. 1234" />
+                </div>
+                <div>
+                    <label for="class-crn">Course CRN *</label>
+                    <select id="class-crn" name="class-crn" required>
+                        <!-- <option value="" disabled selected>Select a Course</option> -->
+                        <!-- <option value="1234">1234</option> -->
                     </select>
                 </div>
                 <div>
                     <label for="instructor">Instructor *</label>
                     <select id="instructor" name="instructor" required>
-                        <option value="" disabled selected>Select a Instructor</option>
-                        <option value="Shada">Shada</option>
+                        <!-- <option value="" disabled selected>Select a Instructor</option> -->
+                        <!-- <option value="Shada">Shada</option> -->
                     </select>
+                </div>
+                <div>
+                    <label for="total-seats">Total Seats *</label>
+                    <input type="text" id="total-seats" name="total-seats" required pattern="\d+" />
                 </div>
                 <div>
                     <button type="submit">Add Class</button>
