@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Main</title>
+    <link rel="stylesheet" href="styles/styles.css" />
+</head>
+
+<body>
+    <header>
+        <img src="media/QULogo.png" alt="QU Logo" />
+        <nav>
+            <a href="admin-main.html">Home</a>
+            <a id="logout-btn" href="login.html">Logout</a>
+        </nav>
+    </header>
+    <main>
+        <section>
+            <h2>Add Course</h2>
+            <form id="add-course-form">
+                <div>
+                    <label for="courseName">Course Name *</label>
+                    <input type="text" id="courseName" name="courseName" required />
+                </div>
+                <div>
+                    <label for="category">Category *</label>
+                    <select id="category" name="category" required>
+                        <option value="" disabled selected>Select a category</option>
+                        <option value="Web Development">Web Development</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="crn">CRN *</label>
+                    <input type="text" id="crn" name="crn" required pattern="\\d+" />
+                </div>
+                <div>
+                    <label for="prereqs">Prerequisite Courses</label>
+                    <select id="prereqs" name="prereqs" multiple>
+                        <option value="Web Development">Web Development</option>
+                        <option value="Computer Science">Computer Science</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="enablePref">Enable Preference List</label>
+                    <input type="checkbox" id="enablePref" />
+                </div>
+                <div>
+                    <button type="submit">Add Course</button>
+                </div>
+            </form>
+        </section>
+        <section>
+            <h2>Add Class</h2>
+            <form id="add-class-form">
+                <div>
+                    <label for="ClassCrn">Course CRN *</label>
+                    <select id="ClassCrn" name="ClassCrn" required>
+                        <option value="" disabled selected>Select a Course</option>
+                        <option value="1234">1234</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="instructor">Instructor *</label>
+                    <select id="instructor" name="instructor" required>
+                        <option value="" disabled selected>Select a Instructor</option>
+                        <option value="Shada">Shada</option>
+                    </select>
+                </div>
+                <div>
+                    <button type="submit">Add Class</button>
+                </div>
+            </form>
+        </section>
+    </main>
+    <footer>
+        <h4>Copyright &copy; Qatar University</h4>
+    </footer>
+</body>
+
+</html>

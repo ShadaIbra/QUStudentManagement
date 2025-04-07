@@ -234,12 +234,25 @@ button.registered {
     width: 400px;
 }
 
-#add-course-form {
+#add-course-form,
+#add-class-form {
     background: var(--backfill-light);
     border: 1px solid var(--border-color);
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 30px;
+}
+
+#add-course-form div,
+#add-class-form div {
+    display: flex;
+    gap: 20px;
+}
+
+#add-course-form div:has(button),
+#add-class-form div:has(button) {
+    justify-self: right;
+    margin-bottom: 0;
 }
 
 .user button {
