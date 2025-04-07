@@ -12,6 +12,7 @@
     --backfill-light: #f9f9f9;
     --backfill-dark: #555555;
     --confirm-color: #58be5c;
+    --cancel-color: #e63946;
     --button: #ececec;
     --link: #888888;
     --link-hover: #d0d0d0;
@@ -205,7 +206,7 @@ button:hover {
 }
 
 .cancel-btn:hover {
-    background: #e63946;
+    background: var(--cancel-color);
 }
 
 button:active {
@@ -231,6 +232,14 @@ button.registered {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 30px;
     width: 400px;
+}
+
+#add-course-form {
+    background: var(--backfill-light);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 30px;
 }
 
 .user button {
@@ -281,7 +290,12 @@ label {
 .hide-login {
     display: none;
 }
+
 .interested {
     background-color: var(--confirm-color);
     color: white;
+}
+
+.hide-validation {
+    display: none;
 }

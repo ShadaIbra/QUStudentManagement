@@ -9,22 +9,22 @@ document.addEventListener("DOMContentLoaded", async function () {
         const tableRow = document.createElement("tr");
 
         const courseName = document.createElement("td");
-        courseName.innerText = course.courseName;
+        courseName.innerHTML = course.courseName;
         tableRow.appendChild(courseName);
 
         const courseCategory = document.createElement("td");
-        courseCategory.innerText = course.category;
+        courseCategory.innerHTML = course.category;
         tableRow.appendChild(courseCategory);
 
         const courseCRN = document.createElement("td");
-        courseCRN.innerText = course.crn;
+        courseCRN.innerHTML = course.crn;
         tableRow.appendChild(courseCRN);
 
         const buttonCol = document.createElement("td");
         tableRow.appendChild(buttonCol);
 
         const interestButton = document.createElement("button");
-        interestButton.innerText = "Interest";
+        interestButton.innerHTML = "Interest";
         buttonCol.appendChild(interestButton);
 
         if (!course.preferenceList) {
@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         if (course.preferenceList.includes(instructor.name)) {
             interestButton.classList.add("interested");
-            interestButton.innerText = "Interested";
+            interestButton.innerHTML = "Interested";
         }
 
         interestButton.addEventListener("click", (event) => handleInterest(event, course));
@@ -52,9 +52,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         if (interestButton.classList.contains("interested")) {
             interestButton.classList.remove("interested");
-            interestButton.innerText = "Interest";
-
-            //crud remove
+            interestButton.innerHTML = "Interest";
 
             const index = course.preferenceList.indexOf(instructor.name);
             if (index !== -1) {
@@ -63,9 +61,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         } else {
             interestButton.classList.add("interested");
-            interestButton.innerText = "Interested";
-
-            //crud add
+            interestButton.innerHTML = "Interested";
 
             if (!course.preferenceList.includes(instructor.name)) {
                 course.preferenceList.push(instructor.name);

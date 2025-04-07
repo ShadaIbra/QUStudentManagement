@@ -38,9 +38,9 @@ document.addEventListener("DOMContentLoaded", async function () {
         return data;
     }
 
-    async function getAvailableCourses() {
+    async function getPendingCourses() {
         const courses = await loadCourses();
-        return courses.filter(course => course.available);
+        return courses.filter(course => course.status === "pending");
     }
 
     async function loadStudents() {
@@ -64,35 +64,35 @@ document.addEventListener("DOMContentLoaded", async function () {
         const tableRow = document.createElement("tr");
 
         const courseName = document.createElement("td");
-        courseName.innerText = course.courseName;
+        courseName.innerHTML = course.courseName;
         tableRow.appendChild(courseName);
 
         const courseCategory = document.createElement("td");
-        courseCategory.innerText = course.category;
+        courseCategory.innerHTML = course.category;
         tableRow.appendChild(courseCategory);
 
         const courseCRN = document.createElement("td");
-        courseCRN.innerText = course.crn;
+        courseCRN.innerHTML = course.crn;
         tableRow.appendChild(courseCRN);
 
         const courseInstructor = document.createElement("td");
-        courseInstructor.innerText = course.instructor;
+        courseInstructor.innerHTML = course.instructor;
         tableRow.appendChild(courseInstructor);
 
         const courseStatus = document.createElement("td");
-        courseStatus.innerText = `${course.totalSeats - course.takenSeats} of ${course.totalSeats} seats remaining`;
+        courseStatus.innerHTML = `${course.totalSeats - course.takenSeats} of ${course.totalSeats} seats remaining`;
         tableRow.appendChild(courseStatus);
 
         const buttonCol = document.createElement("td");
         tableRow.appendChild(buttonCol);
 
         const registerButton = document.createElement("button");
-        registerButton.innerText = "Register";
+        registerButton.innerHTML = "Register";
         buttonCol.appendChild(registerButton);
 
         if (student.pendingCRN.includes(course.crn)) {
             registerButton.classList.add("registered");
-            registerButton.innerText = "Registered";
+            registerButton.innerHTML = "Registered";
         };
 
         registerButton.addEventListener("click", event => handleRegister(event, course));
@@ -122,7 +122,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         if (registerButton.classList.contains("registered")) {
             registerButton.classList.remove("registered");
-            registerButton.innerText = "Register";
+            registerButton.innerHTML = "Register";
             course.takenSeats -= 1;
 
             const index = student.pendingCRN.indexOf(course.crn);
@@ -141,7 +141,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             }
 
             registerButton.classList.add("registered");
-            registerButton.innerText = "Registered";
+            registerButton.innerHTML = "Registered";
             course.takenSeats += 1;
 
             if (!student.pendingCRN.includes(course.crn)) {
@@ -172,7 +172,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
 
     student = await getStudent();
-    courses = await getAvailableCourses();
+    courses = await getPendingCourses();
     renderCourses(courses);
 
     console.log(student);

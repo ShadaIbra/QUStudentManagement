@@ -30,8 +30,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     const res = await fetch("data/courses.json");
     let data = await res.json();
-    data = data.filter(course => course.available);
-
+    
     localStorage.setItem("courses", JSON.stringify(data));
     return data;
   }
