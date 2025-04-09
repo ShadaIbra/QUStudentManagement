@@ -211,6 +211,12 @@ document.addEventListener("DOMContentLoaded", async function () {
         window.location.href = "login.html";
     });
 
+    document.querySelector("#logout-btn").addEventListener("click", function () {
+        event.preventDefault();
+        localStorage.removeItem("loggedInUser");
+        window.location.href = "login.html";
+    });
+
     courses = await loadCourses();
     instructors = await loadInstructors();
     students = await loadStudents();

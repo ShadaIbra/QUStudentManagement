@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             }
         }
         saveCourses();
-        renderCourses();
+        renderCourses(courses);
     }
 
     function renderCourses() {
