@@ -5,13 +5,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     let student;
 
     function saveCourses() {
-        const courses = JSON.parse(localStorage.getItem("courses"));
-
-        for (const course of courses) {
-            const index = courses.findIndex(c => c.crn === courses.crn);
-
-            courses[index] = course;
-        }
         localStorage.setItem("courses", JSON.stringify(courses));
     }
 
@@ -38,10 +31,10 @@ document.addEventListener("DOMContentLoaded", async function () {
         return data;
     }
 
-    async function getPendingCourses() {
-        const courses = await loadCourses();
-        return courses.filter(course => course.status === "pending");
-    }
+    // async function getPendingClasses() {
+    //     const courses = await loadCourses();
+    //     return courses.filter(course => course.status === "pending");
+    // }
 
     async function loadStudents() {
         const saved = localStorage.getItem("students");
@@ -60,7 +53,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         return students.find(s => s.email === loggedInUser.email);
     }
 
-    function renderCourse(course) {
+    function renderClass(course, cls) {
         const tableRow = document.createElement("tr");
 
         const courseName = document.createElement("td");
@@ -72,16 +65,16 @@ document.addEventListener("DOMContentLoaded", async function () {
         tableRow.appendChild(courseCategory);
 
         const courseCRN = document.createElement("td");
-        courseCRN.innerHTML = course.crn;
+        courseCRN.innerHTML = cls.crn;
         tableRow.appendChild(courseCRN);
 
-        const courseInstructor = document.createElement("td");
-        courseInstructor.innerHTML = course.instructor;
-        tableRow.appendChild(courseInstructor);
+        const classInstructor = document.createElement("td");
+        classInstructor.innerHTML = cls.instructor;
+        tableRow.appendChild(classInstructor);
 
-        const courseStatus = document.createElement("td");
-        courseStatus.innerHTML = `${course.totalSeats - course.takenSeats} of ${course.totalSeats} seats remaining`;
-        tableRow.appendChild(courseStatus);
+        const classStatus = document.createElement("td");
+        classStatus.innerHTML = `${cls.totalSeats - cls.takenSeats} of ${cls.totalSeats} seats remaining`;
+        tableRow.appendChild(classStatus);
 
         const buttonCol = document.createElement("td");
         tableRow.appendChild(buttonCol);
@@ -90,42 +83,46 @@ document.addEventListener("DOMContentLoaded", async function () {
         registerButton.innerHTML = "Register";
         buttonCol.appendChild(registerButton);
 
-        if (student.pendingCRN.includes(course.crn)) {
+        if (student.pendingCRN.includes(cls.crn)) {
             registerButton.classList.add("registered");
             registerButton.innerHTML = "Registered";
         };
 
-        registerButton.addEventListener("click", event => handleRegister(event, course));
+        registerButton.addEventListener("click", event => handleRegister(event, course, cls));
 
         return tableRow;
     }
 
-    function renderCourses(courses) {
+    function renderClasses() {
         const tableBody = document.querySelector("tbody");
         tableBody.replaceChildren();
 
-        courses.forEach(course => {
-            tableBody.appendChild(renderCourse(course));
-        });
+        for (const course of courses) {
+            const pendingClasses = course.classes.filter(cls => cls.status === "pending");
+
+            pendingClasses.forEach(cls => {
+                tableBody.appendChild(renderClass(course, cls));
+            });
+        }
     }
 
-    function handleRegister(event, course) {
+    function handleRegister(event, course, cls) {
         const passingGrades = ["A", "B+", "B", "C+", "C", "D"];
-        const passedCourses = student.completedCourses.filter(course => passingGrades.includes(course.grade)).map(course => course.crn);
+        const passedCourses = student.completedCourses.filter(course => passingGrades.includes(course.grade)).map(course => course.code);
 
         const hasPassedPrereqs =
-            course.prereqsCRN.length === 0 ||
-            course.prereqsCRN.every(crn => passedCourses.includes(crn));
+            course.prereqsCode.length === 0 ||
+            course.prereqsCode.every(code => passedCourses.includes(code));
 
-        const seatsRemaining = course.totalSeats - course.takenSeats;
+        const seatsRemaining = cls.totalSeats - cls.takenSeats;
         const registerButton = event.target;
 
         if (registerButton.classList.contains("registered")) {
             registerButton.classList.remove("registered");
             registerButton.innerHTML = "Register";
-            course.takenSeats -= 1;
+            cls.takenSeats -= 1;
 
-            const index = student.pendingCRN.indexOf(course.crn);
+            const index = student.pendingCRN.indexOf(cls.crn);
             if (index !== -1) {
                 student.pendingCRN.splice(index, 1);
             }
@@ -142,15 +139,15 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             registerButton.classList.add("registered");
             registerButton.innerHTML = "Registered";
-            course.takenSeats += 1;
+            cls.takenSeats += 1;
 
-            if (!student.pendingCRN.includes(course.crn)) {
-                student.pendingCRN.push(course.crn);
+            if (!student.pendingCRN.includes(cls.crn)) {
+                student.pendingCRN.push(cls.crn);
             }
         }
         saveCourses();
         saveStudents();
-        renderCourses(courses)
+        renderClasses();
     }
 
     function searchCourses() {
@@ -172,8 +169,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
 
     student = await getStudent();
-    courses = await getPendingCourses();
-    renderCourses(courses);
+    courses = await loadCourses();
+    renderClasses();
 
     console.log(student);
     console.log(loadCourses());

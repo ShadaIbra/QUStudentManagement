@@ -1,13 +1,13 @@
 [
     {
         "email": "s123@gmail.com",
-        "pendingCRN": [
-        ],
+        "pendingCRN": [],
         "inProgressCRN": [
             "3333"
         ],
         "completedCourses": [
             {
+                "code": "PY201",
                 "crn": "3333",
                 "grade": "A"
             }
@@ -24,6 +24,7 @@
         ],
         "completedCourses": [
             {
+                "code": "PY201",
                 "crn": "3333",
                 "grade": "B"
             }
