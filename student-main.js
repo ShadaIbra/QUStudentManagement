@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         return tableRow;
     }
 
-    function renderClasses() {
+    function renderClasses(courses) {
         const tableBody = document.querySelector("tbody");
         tableBody.replaceChildren();
 
@@ -147,17 +147,18 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
         saveCourses();
         saveStudents();
-        renderClasses();
+        renderClasses(courses);
     }
 
     function searchCourses() {
         const search = document.querySelector("#name-search").value.toLowerCase().trim();
 
-        const filteredCourses = courses.filter(course =>
-            course.courseName.toLowerCase().includes(search) ||
-            course.category.toLowerCase().includes(search));
+        const filteredCourses = courses.filter(c =>
+            c.courseName.toLowerCase().includes(search) ||
+            c.category.toLowerCase().includes(search));
 
-        renderCourses(filteredCourses);
+
+        renderClasses(filteredCourses);
     }
 
     document.querySelector("#search-btn").addEventListener("click", searchCourses);
@@ -170,7 +171,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     student = await getStudent();
     courses = await loadCourses();
-    renderClasses();
+    renderClasses(courses);
 
     console.log(student);
     console.log(loadCourses());
