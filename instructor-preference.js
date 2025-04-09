@@ -5,6 +5,41 @@ document.addEventListener("DOMContentLoaded", async function () {
     let courses = [];
     let instructor;
 
+    function saveCourses() {
+        localStorage.setItem("courses", JSON.stringify(courses));
+    }
+
+    async function loadCourses() {
+        const saved = localStorage.getItem("courses");
+        if (saved) {
+            return JSON.parse(saved);
+        }
+
+        const res = await fetch("data/courses.json");
+        let data = await res.json();
+        localStorage.setItem("courses", JSON.stringify(data));
+
+        return data;
+    }
+
+    async function loadInstructors() {
+        const saved = localStorage.getItem("instructors");
+        if (saved) {
+            return JSON.parse(saved);
+        }
+
+        const res = await fetch("data/instructors.json");
+        let data = await res.json();
+
+        localStorage.setItem("instructors", JSON.stringify(data));
+        return data;
+    }
+
+    async function getInstructor() {
+        const instructors = await loadInstructors();
+        return instructors.find(instructor => instructor.email === loggedInUser.email);
+    }
+
     function renderCourse(course) {
         const tableRow = document.createElement("tr");
 
@@ -16,9 +51,9 @@ document.addEventListener("DOMContentLoaded", async function () {
         courseCategory.innerHTML = course.category;
         tableRow.appendChild(courseCategory);
 
-        const courseCRN = document.createElement("td");
-        courseCRN.innerHTML = course.crn;
-        tableRow.appendChild(courseCRN);
+        const courseCode = document.createElement("td");
+        courseCode.innerHTML = course.code;
+        tableRow.appendChild(courseCode);
 
         const buttonCol = document.createElement("td");
         tableRow.appendChild(buttonCol);
@@ -27,10 +62,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         interestButton.innerHTML = "Interest";
         buttonCol.appendChild(interestButton);
 
-        if (!course.preferenceList) {
-            course.preferenceList = [];
-        }
-
         if (course.preferenceList.includes(instructor.name)) {
             interestButton.classList.add("interested");
             interestButton.innerHTML = "Interested";
@@ -38,17 +69,11 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         interestButton.addEventListener("click", (event) => handleInterest(event, course));
 
-
         return tableRow;
     }
 
     function handleInterest(event, course) {
-
         const interestButton = event.target;
-
-        if (!course.preferenceList) {
-            course.preferenceList = [];
-        }
 
         if (interestButton.classList.contains("interested")) {
             interestButton.classList.remove("interested");
@@ -67,30 +92,17 @@ document.addEventListener("DOMContentLoaded", async function () {
                 course.preferenceList.push(instructor.name);
             }
         }
-
+        saveCourses();
+        renderCourses();
     }
-    
-    function renderCourses(courses) {
+
+    function renderCourses() {
         const tableBody = document.querySelector("tbody");
         tableBody.replaceChildren();
 
         courses.forEach(course => {
             tableBody.appendChild(renderCourse(course));
         });
-    }
-
-    async function loadCourses() {
-        const res = await fetch('data/courses.json');
-        const courses = await res.json();
-
-        return courses.filter(course => !course.instructor);
-    }
-
-    async function getInstructor() {
-        const res = await fetch('data/instructors.json');
-        const instructors = await res.json();
-
-        return instructors.find(instructor => instructor.email === loggedInUser.email);
     }
 
     function searchCourses() {
@@ -112,8 +124,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
 
     instructor = await getInstructor();
-
     courses = await loadCourses();
-    renderCourses(courses);
 
+    renderCourses(courses);
 });
