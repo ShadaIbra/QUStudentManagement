@@ -1,24 +1,55 @@
 document.addEventListener("DOMContentLoaded", async function () {
 
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-    const courses = await fetch('data/courses.json').then(res => res.json());
 
     let instructor;
-    let instructorCourses;
+    let instructorCourses = [];
+    let courses = [];
+
+    async function loadInstructors() {
+        const saved = localStorage.getItem("instructors");
+        if (saved) {
+            return JSON.parse(saved);
+        }
+
+        const res = await fetch("data/instructors.json");
+        let data = await res.json();
+
+        localStorage.setItem("instructors", JSON.stringify(data));
+        return data;
+    }
 
     async function getInstructor() {
-        const res = await fetch('data/instructors.json');
-        const instructors = await res.json();
-
+        const instructors = await loadInstructors();
         return instructors.find(instructor => instructor.email === loggedInUser.email);
+    }
+
+    async function loadCourses() {
+        const saved = localStorage.getItem("courses");
+        if (saved) {
+            return JSON.parse(saved);
+        }
+
+        const res = await fetch("data/courses.json");
+        let data = await res.json();
+        localStorage.setItem("courses", JSON.stringify(data));
+
+        return data;
     }
 
     //only gets courses that are for the current logged in instructor
     function getInstructorCourses() {
-        if (instructor) {
-            return courses.filter(course => course.instructor === instructor.name);  // Return the courses for the logged-in instructor
+        const result = [];
+
+        for (const course of courses) {
+            for (const cls of course.classes) {
+                if (cls.instructor === instructor.name) {
+                    result.push({ course, class: cls });
+                }
+            }
         }
-        return [];
+
+        return result;
     }
 
     function displayInstructorCourses() {
@@ -29,12 +60,12 @@ document.addEventListener("DOMContentLoaded", async function () {
             return;
         }
 
-        coursesTable.innerHTML = instructorCourses.map(course => `
+        coursesTable.innerHTML = instructorCourses.map(c => `
             <div class="course-card">
-                <h3>${course.courseName}</h3>
-                <h4>${course.category}</h4>
-                <h4>CRN: ${course.crn}</h4>
-                <button class="grades-button" data-crn="${course.crn}">Grades</button>
+                <h3>${c.course.courseName}</h3>
+                <h4>${c.course.category}</h4>
+                <h4>CRN: ${c.class.crn}</h4>
+                <button class="grades-button" data-crn="${c.class.crn}">Grades</button>
             </div>
         `).join('');
     }
@@ -55,17 +86,19 @@ document.addEventListener("DOMContentLoaded", async function () {
             const crn = event.target.getAttribute("data-crn");
 
             goToGradesPage(crn);
-
         }
     });
 
     instructor = await getInstructor();
+    courses = await loadCourses();
+
     instructorCourses = getInstructorCourses();
 
     console.log(instructor);
     console.log(instructorCourses);
 
-
     displayInstructorCourses();
+
+    // localStorage.removeItem("currentCRN");
 
 })
