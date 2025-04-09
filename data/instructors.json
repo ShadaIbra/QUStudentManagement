@@ -2,25 +2,25 @@
     {
         "email": "i123@gmail.com",
         "name": "Shada",
-        "expertiseAreas": ["Web Development", "JavaScript", "Frontend"]
+        "expertiseAreas": ["Database Systems", "JavaScript", "Frontend"]
         
     },
     {
         "email": "i124@gmail.com",
         "name": "Adiba",
-        "expertiseAreas": ["Web Development", "JavaScript", "Backend"]
+        "expertiseAreas": ["Web Development", "Database Systems", "Backend"]
         
     },
     {
         "email": "i125@gmail.com",
         "name": "Hala",
-        "expertiseAreas": ["Programming", "Data Structures", "Algorithms"]
+        "expertiseAreas": ["Programming", "Database Systems", "Algorithms"]
         
     },
     {
         "email": "i126@gmail.com",
         "name": "Yara",
-        "expertiseAreas": ["Object-Oriented Programming", "Java", "Software Engineering"]
+        "expertiseAreas": ["Database Systems", "Java", "Software Engineering"]
         
     }
 ]

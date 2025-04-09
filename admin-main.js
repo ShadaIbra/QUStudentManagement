@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", async function () {
-    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
 
     let courses = [];
+    let instructors = [];
 
     function saveCourses() {
         localStorage.setItem("courses", JSON.stringify(courses));
@@ -20,21 +20,40 @@ document.addEventListener("DOMContentLoaded", async function () {
         return data;
     }
 
-    function displayInProgress() {
-        const inProgressTable = document.querySelector("#in-progress-courses");
-        const inProgressCourses = courses.filter(course => course.status === "in-progress");
+    async function loadInstructors() {
+        const saved = localStorage.getItem("instructors");
+        if (saved) {
+            return JSON.parse(saved);
+        }
 
-        inProgressTable.innerHTML = inProgressCourses.map(course => `
-                  <tr>
-                    <td>${course.courseName}</td>
-                    <td>${course.category}</td>
-                    <td>${course.crn}</td>
-                    <td>${course.instructor}</td>
-                  </tr>
-                `).join('');
+        const res = await fetch("data/instructors.json");
+        let data = await res.json();
+
+        localStorage.setItem("instructors", JSON.stringify(data));
+        return data;
     }
 
-    function renderPendingCourse(course) {
+    function displayInProgress() {
+        const inProgressTable = document.querySelector("#in-progress-classes");
+        let html = "";
+
+        for (const course of courses) {
+            const inProgressClasses = course.classes.filter(cls => cls.status === "in-progress");
+
+            html += inProgressClasses.map(cls => `
+                <tr>
+                    <td>${course.courseName}</td>
+                    <td>${course.category}</td>
+                    <td>${cls.crn}</td>
+                    <td>${cls.instructor}</td>
+                </tr>
+            `).join('');
+        }
+
+        inProgressTable.innerHTML = html;
+    }
+
+    function renderPendingClass(course, cls) {
         const tableRow = document.createElement("tr");
 
         const courseName = document.createElement("td");
@@ -46,7 +65,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         tableRow.appendChild(courseCategory);
 
         const courseCRN = document.createElement("td");
-        courseCRN.innerHTML = course.crn;
+        courseCRN.innerHTML = cls.crn;
         tableRow.appendChild(courseCRN);
 
         const courseInstructor = document.createElement("td");
@@ -56,15 +75,29 @@ document.addEventListener("DOMContentLoaded", async function () {
         selectInstructor.classList.add("instructors");
         selectInstructor.name = "instructors";
 
+        const interestedOptions = course.preferenceList
+            .map(instructorName => `
+                <option value="${instructorName}" ${cls.instructor === instructorName ? "selected" : ""}>
+                ${instructorName}
+                </option>`).join('');
+
+        const otherOptions = instructors
+            .filter(instructor => instructor.expertiseAreas.includes(course.courseName))
+            .map(instructor => `
+                  <option value="${instructor.name}" ${cls.instructor === instructor.name ? "selected" : ""}>
+                    ${instructor.name}
+                  </option>
+                `).join('');
+
         selectInstructor.innerHTML = `
-        <option value="" disabled ${!course.instructor ? "selected" : ""}>-</option>
-        ${course.preferenceList.map(instructorName => `<option value="${instructorName}" ${course.instructor === instructorName ? "selected" : ""}>${instructorName}</option>`).join('')}
-        `;
+                <option value="" disabled ${!cls.instructor ? "selected" : ""}>-</option>
+                ${interestedOptions ? `<optgroup label="Interested Instructors">${interestedOptions}</optgroup>` : ''}
+                ${otherOptions ? `<optgroup label="Instructors">${otherOptions}</optgroup>` : ''}`;
 
         courseInstructor.appendChild(selectInstructor);
 
         const courseStatus = document.createElement("td");
-        courseStatus.innerHTML = `${course.totalSeats - course.takenSeats} of ${course.totalSeats} seats remaining`;
+        courseStatus.innerHTML = `${cls.totalSeats - cls.takenSeats} of ${cls.totalSeats} seats remaining`;
         tableRow.appendChild(courseStatus);
 
         const buttonCol = document.createElement("td");
@@ -81,54 +114,57 @@ document.addEventListener("DOMContentLoaded", async function () {
         buttonCol.appendChild(CancelButton);
 
         selectInstructor.addEventListener("change", function () {
-            course.instructor = selectInstructor.value;
+            cls.instructor = selectInstructor.value;
             saveCourses();
         });
 
-        validateButton.addEventListener("click", event => handleValidate(event, course, selectInstructor.value));
-        CancelButton.addEventListener("click", event => handleCancel(event, course));
+        validateButton.addEventListener("click", () => handleValidate(cls, selectInstructor.value));
+        CancelButton.addEventListener("click", () => handleCancel(cls));
 
         return tableRow;
     }
 
-    function renderPendingCourses(courses) {
-        const tableBody = document.querySelector("#pending-courses");
+    function renderPendingClasses() {
+        const tableBody = document.querySelector("#pending-classes");
         tableBody.replaceChildren();
 
-        pendingCourses = courses.filter(course => course.status === "pending");
+        for (const course of courses) {
+            const pendingClasses = course.classes.filter(cls => cls.status === "pending");
 
-        pendingCourses.forEach(course => {
-            tableBody.appendChild(renderPendingCourse(course));
-        });
+            pendingClasses.forEach(cls => {
+                tableBody.appendChild(renderPendingClass(course, cls));
+            });
+        }
     }
 
-    function handleValidate(event, course, selectedInstructor) {
-        seatsTakenPercent = course.takenSeats / course.totalSeats;
+    function handleValidate(cls, selectedInstructor) {
+        seatsTakenPercent = cls.takenSeats / cls.totalSeats;
 
         if (seatsTakenPercent < 0.5) {
-            alert("This course cannot be validated because it does not have enough student registrations.");
+            alert("This class cannot be validated because it does not have enough student registrations.");
             return;
         }
 
         if (!selectedInstructor) {
-            alert("Please select an instructor before validating the course.");
+            alert("Please select an instructor before validating the class.");
             return;
         }
 
-        course.validated = true;
-        course.status = "in-progress";
+        cls.validated = true;
+        cls.status = "in-progress";
 
         saveCourses();
-        renderPendingCourses(courses);
+        renderPendingClasses();
         displayInProgress();
     }
 
-    function handleCancel(event, cancelCourse) {
+    function handleCancel(cancelClass) {
 
-        courses = courses.filter(course => course.crn !== cancelCourse.crn);
-
+        for (const course of courses) {
+            course.classes = course.classes.filter(cls => cls.crn !== cancelClass.crn);
+        }
         saveCourses();
-        renderPendingCourses(courses);
+        renderPendingClasses(courses);
     }
 
     document.querySelector("#logout-btn").addEventListener("click", function () {
@@ -138,10 +174,15 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
 
     courses = await loadCourses();
+    instructors = await loadInstructors();
 
-    renderPendingCourses(courses);
+    console.log(courses);
+    console.log(instructors);
+
+    renderPendingClasses(courses);
 
     displayInProgress();
 
     // localStorage.removeItem("courses");
+    // localStorage.removeItem("instructors");
 });

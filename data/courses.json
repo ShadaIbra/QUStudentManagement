@@ -1,86 +1,106 @@
 [
     {
-        "courseName": "JavaScript",
+        "courseName": "JavaScript Fundamentals",
         "category": "Web Development",
-        "crn": "1111",
-        "instructor": "Shada",
-        "takenSeats": 2,
-        "totalSeats": 20,
-        "prereqsCRN": [
-            "2222"
+        "code": "JS101",
+        "prereqsCode": [
+            "PY201",
+            "PY201"
         ],
-        "available": false,
-        "validated": true,
+        "preferenceOpen": true,
         "preferenceList": [
-            "Shada"
+            "Shada",
+            "Adiba"
+        ],
+        "classes": [
+            {
+                "crn": "1001",
+                "instructor": "Shada",
+                "totalSeats": 30,
+                "takenSeats": 10,
+                "status": "in-progress",
+                "validated": true
+            },
+            {
+                "crn": "1002",
+                "instructor": "Adiba",
+                "totalSeats": 25,
+                "takenSeats": 20,
+                "status": "in-progress",
+                "validated": true
+            }
         ]
     },
     {
-        "courseName": "JavaScript",
-        "category": "Web Development",
-        "crn": "2222",
-        "instructor": "Adiba",
-        "takenSeats": 2,
-        "totalSeats": 20,
-        "prereqsCRN": [],
-        "available": false,
-        "validated": true,
+        "courseName": "Python for Data Science",
+        "category": "Data Science",
+        "code": "PY201",
+        "prereqsCode": [],
+        "preferenceOpen": true,
         "preferenceList": [
-            "Shada"
+            "Khaled"
+        ],
+        "classes": [
+            {
+                "crn": "2001",
+                "instructor": "Khaled",
+                "totalSeats": 40,
+                "takenSeats": 35,
+                "status": "in-progress",
+                "validated": true
+            }
         ]
     },
     {
-        "courseName": "JavaScript",
-        "category": "Web Development",
-        "crn": "3333",
-        "instructor": "",
-        "takenSeats": 2,
-        "totalSeats": 20,
-        "prereqsCRN": [],
-        "available": false,
-        "validated": true,
-        "preferenceList": []
-    },
-    {
-        "courseName": "OOP",
-        "category": "Programming",
-        "crn": "4444",
-        "instructor": "Yara",
-        "takenSeats": 19,
-        "totalSeats": 20,
-        "prereqsCRN": [],
-        "available": true,
-        "validated": true,
-        "preferenceList": [
-            "Shada"
-        ]
-    },
-    {
-        "courseName": "AI Basics",
-        "category": "Artificial Intelligence",
-        "crn": "5555",
-        "instructor": "Shada",
-        "takenSeats": 5,
-        "totalSeats": 30,
-        "prereqsCRN": [],
-        "available": true,
-        "validated": true,
-        "preferenceList": [
-            "Shada"
-        ]
-    },
-    {
-        "courseName": "Data Structures",
+        "courseName": "Database Systems",
         "category": "Computer Science",
-        "crn": "6666",
-        "instructor": null,
-        "takenSeats": 10,
-        "totalSeats": 25,
-        "prereqsCRN": [],
-        "available": true,
-        "validated": true,
+        "code": "DB301",
+        "prereqsCode": [
+            "PY201"
+        ],
+        "preferenceOpen": false,
         "preferenceList": [
+            "Adiba",
+            "Hala"
+        ],
+        "classes": [
+            {
+                "crn": "3001",
+                "instructor": "",
+                "totalSeats": 20,
+                "takenSeats": 12,
+                "status": "pending",
+                "validated": false
+            },
+            {
+                "crn": "3002",
+                "instructor": "Shada",
+                "totalSeats": 20,
+                "takenSeats": 11,
+                "status": "pending",
+                "validated": false
+            }
+        ]
+    },
+    {
+        "courseName": "UI/UX Design",
+        "category": "Design",
+        "code": "UX101",
+        "prereqsCode": [],
+        "preferenceOpen": true,
+        "preferenceList": [
+            "Noura",
             "Shada"
+        ],
+        "classes": [
+            {
+                "crn": "4001",
+                "instructor": "",
+                "totalSeats": 25,
+                "takenSeats": 13,
+                "status": "pending",
+                "validated": false
+            }
         ]
     }
 ]
