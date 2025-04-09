@@ -33,8 +33,9 @@
                     </select>
                 </div>
                 <div>
-                    <label for="crn">CRN *</label>
-                    <input type="text" id="crn" name="crn" required pattern="\d{4}" placeholder="e.g. 1234" />
+                    <label for="code">Code *</label>
+                    <input type="text" id="code" name="code" required pattern="[A-Za-z]{2}\d{3}"
+                        placeholder="e.g. 1234" />
                 </div>
                 <div>
                     <label for="prereqs">Prerequisite Courses</label>
@@ -56,13 +57,13 @@
             <h2>Add Class</h2>
             <form id="add-class-form">
                 <div>
-                    <label for="class-code">Class Code *</label>
-                    <input type="text" id="class-code" name="class-code" required pattern="\d{4}"
+                    <label for="class-crn">Class CRN *</label>
+                    <input type="text" id="class-crn" name="class-crn" required pattern="\d{4}"
                         placeholder="e.g. 1234" />
                 </div>
                 <div>
-                    <label for="class-crn">Course CRN *</label>
-                    <select id="class-crn" name="class-crn" required>
+                    <label for="course-code">Course Code *</label>
+                    <select id="course-code" name="course-code" required>
                         <!-- <option value="" disabled selected>Select a Course</option> -->
                         <!-- <option value="1234">1234</option> -->
                     </select>
