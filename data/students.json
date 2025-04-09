@@ -1,6 +1,8 @@
 [
     {
         "email": "s123@gmail.com",
+        "name": "Shada",
+        "id": 1234,
         "pendingCourses": [],
         "inProgressCourses": [
             {
@@ -18,22 +20,24 @@
     },
     {
         "email": "s124@gmail.com",
+        "name": "Adiba",
+        "id": 5678,
         "pendingCourses": [
             {
                 "code": "PY201",
-                "crn": "5555"
+                "crn": "2001"
             }
         ],
         "inProgressCourses": [
             {
                 "code": "PY201",
-                "crn": "3333"
+                "crn": "2001"
             }
         ],
         "completedCourses": [
             {
                 "code": "PY201",
-                "crn": "3333",
+                "crn": "2001",
                 "grade": "B"
             }
         ]

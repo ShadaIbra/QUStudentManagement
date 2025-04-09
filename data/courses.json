@@ -38,12 +38,11 @@
         "prereqsCode": [],
         "preferenceOpen": true,
         "preferenceList": [
-            "Khaled"
         ],
         "classes": [
             {
                 "crn": "2001",
-                "instructor": "Khaled",
+                "instructor": "Shada",
                 "totalSeats": 40,
                 "takenSeats": 35,
                 "status": "in-progress",
