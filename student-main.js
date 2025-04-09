@@ -31,11 +31,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         return data;
     }
 
-    // async function getPendingClasses() {
-    //     const courses = await loadCourses();
-    //     return courses.filter(course => course.status === "pending");
-    // }
-
     async function loadStudents() {
         const saved = localStorage.getItem("students");
         if (saved) {
