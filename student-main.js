@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         registerButton.innerHTML = "Register";
         buttonCol.appendChild(registerButton);
 
-        if (student.pendingCRN.includes(cls.crn)) {
+        if (student.pendingCourses.some(c => c.crn === cls.crn)) {
             registerButton.classList.add("registered");
             registerButton.innerHTML = "Registered";
         };
@@ -122,10 +122,15 @@ document.addEventListener("DOMContentLoaded", async function () {
             registerButton.innerHTML = "Register";
             cls.takenSeats -= 1;
 
-            const index = student.pendingCRN.indexOf(cls.crn);
+            const index = student.pendingCourses.findIndex(c => c.crn === cls.crn);
             if (index !== -1) {
-                student.pendingCRN.splice(index, 1);
+                student.pendingCourses.splice(index, 1);
             }
+
+            if (!student.inProgressCourses.some(c => c.crn === cls.crn)) {
+                student.inProgressCourses.push({ code: course.code, crn: cls.crn });
+            }
+
         } else {
             if (!hasPassedPrereqs) {
                 alert("You cannot register for this course. You must complete all prerequisites.");
@@ -141,8 +146,8 @@ document.addEventListener("DOMContentLoaded", async function () {
             registerButton.innerHTML = "Registered";
             cls.takenSeats += 1;
 
-            if (!student.pendingCRN.includes(cls.crn)) {
-                student.pendingCRN.push(cls.crn);
+            if (!student.pendingCourses.some(c => c.crn === cls.crn)) {
+                student.pendingCourses.push({ code: course.code, crn: cls.crn });
             }
         }
         saveCourses();

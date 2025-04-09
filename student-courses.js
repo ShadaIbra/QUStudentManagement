@@ -30,53 +30,59 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     const res = await fetch("data/courses.json");
     let data = await res.json();
-    
+
     localStorage.setItem("courses", JSON.stringify(data));
     return data;
   }
 
-  function getCourse(crn) {
-    return courses.find(course => course.crn === crn);
+  function getCourseAndClass(code, crn) {
+    const course = courses.find(course => course.code === code);
+    if (!course) return null;
+
+    const cls = course.classes.find(cls => cls.crn === crn);
+    if (!cls) return null;
+
+    return { course, class: cls };
   }
 
   function displayLearningPath() {
     const pendingTable = document.querySelector("#pending-courses");
-    const pendingCourses = student.pendingCRN.map(crn => getCourse(crn));
+    const pendingCourses = student.pendingCourses.map(course => getCourseAndClass(course.code, course.crn));
 
-    pendingTable.innerHTML = pendingCourses.map(course => `
+    pendingTable.innerHTML = pendingCourses.map(c => `
               <tr>
-                <td>${course.courseName}</td>
-                <td>${course.category}</td>
-                <td>${course.crn}</td>
-                <td>${course.instructor}</td>
+                <td>${c.course.courseName}</td>
+                <td>${c.course.category}</td>
+                <td>${c.class.crn}</td>
+                <td>${c.class.instructor}</td>
               </tr>
             `).join('');
 
     const inProgressTable = document.querySelector("#in-progress-courses");
-    const inProgressCourses = student.inProgressCRN.map(crn => getCourse(crn));
+    const inProgressCourses = student.inProgressCourses.map(course => getCourseAndClass(course.code, course.crn));
 
-    inProgressTable.innerHTML = inProgressCourses.map(course => `
+    inProgressTable.innerHTML = inProgressCourses.map(c => `
               <tr>
-                <td>${course.courseName}</td>
-                <td>${course.category}</td>
-                <td>${course.crn}</td>
-                <td>${course.instructor}</td>
+                <td>${c.course.courseName}</td>
+                <td>${c.course.category}</td>
+                <td>${c.class.crn}</td>
+                <td>${c.class.instructor}</td>
               </tr>
             `).join('');
 
     const completedTable = document.querySelector("#completed-courses");
     const completedCourses = student.completedCourses.map(course => ({
-      course: getCourse(course.crn),
+      ...getCourseAndClass(course.code, course.crn),
       grade: course.grade
     }));
 
-    completedTable.innerHTML = completedCourses.map(courseDetails => `
+    completedTable.innerHTML = completedCourses.map(c => `
               <tr>
-                <td>${courseDetails.course.courseName}</td>
-                <td>${courseDetails.course.category}</td>
-                <td>${courseDetails.course.crn}</td>
-                <td>${courseDetails.course.instructor}</td>
-                <td>${courseDetails.grade}</td>
+                <td>${c.course.courseName}</td>
+                <td>${c.course.category}</td>
+                <td>${c.class.crn}</td>
+                <td>${c.class.instructor}</td>
+                <td>${c.grade}</td>
               </tr>
             `).join('');
   }
@@ -89,12 +95,11 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   student = await getStudent();
   courses = await loadCourses();
-  displayLearningPath();
 
   console.log(student);
   console.log(courses);
+  displayLearningPath();
 
-  // localStorage.removeItem("students");
-  // localStorage.removeItem("courses");
-
+  localStorage.removeItem("students");
+  localStorage.removeItem("courses");
 });
