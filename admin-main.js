@@ -64,12 +64,12 @@ document.addEventListener("DOMContentLoaded", async function () {
         courseCategory.innerHTML = course.category;
         tableRow.appendChild(courseCategory);
 
-        const courseCRN = document.createElement("td");
-        courseCRN.innerHTML = cls.crn;
-        tableRow.appendChild(courseCRN);
+        const classCRN = document.createElement("td");
+        classCRN.innerHTML = cls.crn;
+        tableRow.appendChild(classCRN);
 
-        const courseInstructor = document.createElement("td");
-        tableRow.appendChild(courseInstructor);
+        const classInstructor = document.createElement("td");
+        tableRow.appendChild(classInstructor);
 
         const selectInstructor = document.createElement("select");
         selectInstructor.classList.add("instructors");
@@ -94,11 +94,11 @@ document.addEventListener("DOMContentLoaded", async function () {
                 ${interestedOptions ? `<optgroup label="Interested Instructors">${interestedOptions}</optgroup>` : ''}
                 ${otherOptions ? `<optgroup label="Instructors">${otherOptions}</optgroup>` : ''}`;
 
-        courseInstructor.appendChild(selectInstructor);
+        classInstructor.appendChild(selectInstructor);
 
-        const courseStatus = document.createElement("td");
-        courseStatus.innerHTML = `${cls.totalSeats - cls.takenSeats} of ${cls.totalSeats} seats remaining`;
-        tableRow.appendChild(courseStatus);
+        const classStatus = document.createElement("td");
+        classStatus.innerHTML = `${cls.totalSeats - cls.takenSeats} of ${cls.totalSeats} seats remaining`;
+        tableRow.appendChild(classStatus);
 
         const buttonCol = document.createElement("td");
         buttonCol.classList.add("validate-btns");
