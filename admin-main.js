@@ -194,7 +194,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
 
         for (const s of students) {
-            const index = s.pendingCourses.findIndex(c => c.crn === cls.crn);
+            const index = s.pendingCourses.findIndex(c => c.crn === c.crn);
             if (index !== -1) {
                 s.pendingCourses.splice(index, 1);
             }

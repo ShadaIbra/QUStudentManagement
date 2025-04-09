@@ -37,8 +37,7 @@
         "code": "PY201",
         "prereqsCode": [],
         "preferenceOpen": true,
-        "preferenceList": [
-        ],
+        "preferenceList": [],
         "classes": [
             {
                 "crn": "2001",
@@ -96,7 +95,7 @@
                 "crn": "4001",
                 "instructor": "",
                 "totalSeats": 25,
-                "takenSeats": 13,
+                "takenSeats": 25,
                 "status": "pending",
                 "validated": false
             }

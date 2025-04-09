@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         form.addEventListener("submit", handleUserLogin);
     });
 
-    initializeLogin();
+    await initializeLogin();
 
     // localStorage.removeItem("categories");
     // localStorage.removeItem("courses");

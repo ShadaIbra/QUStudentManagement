@@ -96,7 +96,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         renderCourses(courses);
     }
 
-    function renderCourses() {
+    function renderCourses(courses) {
         const tableBody = document.querySelector("tbody");
         tableBody.replaceChildren();
 
@@ -112,6 +112,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             course.courseName.toLowerCase().includes(search) ||
             course.category.toLowerCase().includes(search));
 
+        console.log(filteredCourses);
         renderCourses(filteredCourses);
     }
 

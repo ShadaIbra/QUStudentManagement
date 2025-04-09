@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", async function () {
+    
     categories = [];
     courses = [];
     instructors = [];
@@ -90,7 +91,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             category,
             code,
             preferenceOpen: enablePref,
-            prereqscodeCode: prereqs || [],
+            prereqsCode: prereqs || [],
             preferenceList: [],
             classes: []
         }
@@ -113,6 +114,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         const totalSeats = parseInt(formData.get("total-seats"));
 
         const instructor = formData.get("instructor");
+
         const course = getCourse(code);
 
         for (const c of courses) {
@@ -124,7 +126,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         const newClass = {
             crn,
-            instructor,
+            instructor: instructor || null,
             takenSeats: 0,
             totalSeats,
             status: "pending",

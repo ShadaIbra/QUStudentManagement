@@ -100,6 +100,6 @@ document.addEventListener("DOMContentLoaded", async function () {
   console.log(courses);
   displayLearningPath();
 
-  localStorage.removeItem("students");
-  localStorage.removeItem("courses");
+  // localStorage.removeItem("students");
+  // localStorage.removeItem("courses");
 });
