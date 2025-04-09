@@ -2,53 +2,85 @@ document.addEventListener("DOMContentLoaded", async function () {
     const urlParams = new URLSearchParams(window.location.search);
     const crn = urlParams.get('crn');  // getting CRN from the URL parameters thats called in instructor-main.js
 
-    // Fetch courses and students data
-    const courses = await fetch('data/courses.json').then(res => res.json());
-    const students = await fetch('data/students.json').then(res => res.json());
+    let courses = [];
+    let students = [];
+    let course;
 
-    // Find the course by CRN
-    const course = courses.find(c => c.crn === crn);
-    
-    // If the course is not found, display an error message
-    if (!course) {
-        document.querySelector("#course-header").innerHTML = "<p>Course not found!</p>";
-        document.querySelector("tbody").innerHTML = "<tr><td colspan='3'>No students enrolled in this course.</td></tr>";
-        return;
+    function saveStudents() {
+        localStorage.setItem("students", JSON.stringify(students));
     }
 
-    // Display the course header with course name and CRN
-    const courseHeader = document.querySelector("#course-header");
-    courseHeader.innerHTML = `${course.courseName} (CRN: ${course.crn})`;
+    async function loadCourses() {
+        const saved = localStorage.getItem("courses");
+        if (saved) {
+            return JSON.parse(saved);
+        }
 
-    const tbody = document.querySelector("tbody");
+        const res = await fetch("data/courses.json");
+        let data = await res.json();
+        localStorage.setItem("courses", JSON.stringify(data));
 
-    // Filter students who are enrolled in this course (pending, in-progress, or completed)
-    const enrolledStudents = students.filter(student => {
-        const isInProgress = student.inProgressCRN.includes(crn);
-        const isCompleted = student.completedCourses.some(c => c.crn === crn);
-        const isPending = student.pendingCRN.includes(crn);
+        return data;
+    }
 
-        // Return students who are either pending, in-progress, or completed the course
-        return isPending || isInProgress || isCompleted;
-    });
+    async function loadStudents() {
+        const saved = localStorage.getItem("students");
+        if (saved) {
+            return JSON.parse(saved);
+        }
 
-    // If no students are enrolled in the course, display a message
-    if (enrolledStudents.length === 0) {
-        tbody.innerHTML = "<tr><td colspan='3'>No students enrolled in this course.</td></tr>";
-    } else {
-        // Map over each enrolled student and generate a table row with the student's grade options
-        tbody.innerHTML = enrolledStudents.map(student => {
-            // Find the completed course for this student and CRN
-            const completedCourse = student.completedCourses.find(c => c.crn === crn);
-            const currentGrade = completedCourse ? completedCourse.grade : '';
+        const res = await fetch("data/students.json");
+        const data = await res.json();
+        localStorage.setItem("students", JSON.stringify(data));
+        return data;
+    }
 
-            // Generate the row with the student's email, grade, and grade dropdown
-            return `
+    function getCourseAndClass(crn) {
+        for (const course of courses) {
+            const cls = course.classes.find(cls => cls.crn === crn);
+            if (cls) {
+                return { course, class: cls };
+            }
+        }
+        return null;
+    }
+
+    function renderStudents() {
+
+        const courseDetails = getCourseAndClass(crn);
+        // Display the course header with course name and CRN
+        const courseHeader = document.querySelector("#course-header");
+        courseHeader.innerHTML = `${courseDetails.course.courseName} (CRN: ${courseDetails.class.crn})`;
+
+        const tbody = document.querySelector("tbody");
+
+        // Filter students who are enrolled in this course (pending, in-progress, or completed)
+        const enrolledStudents = students.filter(student => {
+            const isInProgress = student.inProgressCourses.some(c => c.crn === crn);
+            const isCompleted = student.completedCourses.some(c => c.crn === crn);
+            const isPending = student.pendingCourses.some(c => c.crn === crn);
+
+            // Return students who are either pending, in-progress, or completed the course
+            return isPending || isInProgress || isCompleted;
+        });
+
+        // If no students are enrolled in the course, display a message
+        if (enrolledStudents.length === 0) {
+            tbody.innerHTML = "<tr><td colspan='3'>No students enrolled in this course.</td></tr>";
+        } else {
+            // Map over each enrolled student and generate a table row with the student's grade options
+            tbody.innerHTML = enrolledStudents.map(student => {
+                // Find the completed course for this student and CRN
+                const completedCourse = student.completedCourses.find(c => c.crn === crn);
+                const currentGrade = completedCourse ? completedCourse.grade : '';
+
+                // Generate the row with the student's email, grade, and grade dropdown
+                return `
                 <tr>
-                    <td>${student.email}</td>
-                    <td>${completedCourse ? completedCourse.grade : 'N/A'}</td>
+                    <td>${student.name}</td>
+                    <td>${student.id}</td>
                     <td>
-                        <select name="grades" id="grades-${student.email}">
+                        <select name="grades" id="grades-${student.email}" data-email="${student.email}">
                             <option value="A" ${currentGrade === 'A' ? 'selected' : ''}>A</option>
                             <option value="B+" ${currentGrade === 'B+' ? 'selected' : ''}>B+</option>
                             <option value="B" ${currentGrade === 'B' ? 'selected' : ''}>B</option>
@@ -60,22 +92,41 @@ document.addEventListener("DOMContentLoaded", async function () {
                     </td>
                 </tr>
             `;
-        }).join('');
+            }).join('');
+        }
+
+        document.querySelectorAll('select[name="grades"]').forEach(select => {
+            select.addEventListener('change', function () {
+                const email = select.dataset.email;
+                const newGrade = select.value;
+
+                const student = students.find(s => s.email === email);
+
+                student.completedCourses = student.completedCourses.filter(c => c.crn !== crn);
+
+                if (newGrade) {
+                    student.completedCourses.push({ code: courseDetails.course.code, crn: crn, grade: newGrade });
+                }
+
+                // Save updated students array
+                saveStudents();
+            });
+        });
     }
 
-    document.querySelectorAll('select[name="grades"]').forEach(select => {
-        select.addEventListener('change', function () {
-            const studentEmail = select.closest('tr').querySelector('td').textContent;
-            const newGrade = select.value;
-            console.log(`New grade for ${studentEmail}: ${newGrade}`);
-            // Here you would need to update the student's grade in your data or database
-        });
-    });
-    
     // Log out functionality to remove the logged-in instructor and redirect to the login page
     document.querySelector("#logout-btn").addEventListener("click", function () {
         event.preventDefault();
         localStorage.removeItem("loggedInUser");
         window.location.href = "login.html";
     });
+
+    courses = await loadCourses();
+    students = await loadStudents();
+
+    renderStudents();
+
+    // localStorage.removeItem("instructors");
+    // localStorage.removeItem("courses");
+    // localStorage.removeItem("students");
 });
