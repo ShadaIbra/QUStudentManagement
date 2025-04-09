@@ -1,26 +1,34 @@
 [
     {
         "email": "s123@gmail.com",
-        "pendingCRN": [],
-        "inProgressCRN": [
-            "3333"
+        "pendingCourses": [],
+        "inProgressCourses": [
+            {
+                "code": "PY201",
+                "crn": "2001"
+            }
         ],
         "completedCourses": [
             {
                 "code": "PY201",
-                "crn": "3333",
+                "crn": "2001",
                 "grade": "A"
             }
         ]
     },
     {
         "email": "s124@gmail.com",
-        "pendingCRN": [
-            "5555"
+        "pendingCourses": [
+            {
+                "code": "PY201",
+                "crn": "5555"
+            }
         ],
-        "inProgressCRN": [
-            "3333",
-            "1111"
+        "inProgressCourses": [
+            {
+                "code": "PY201",
+                "crn": "3333"
+            }
         ],
         "completedCourses": [
             {

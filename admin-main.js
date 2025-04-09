@@ -2,10 +2,16 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     let courses = [];
     let instructors = [];
+    let students = [];
 
     function saveCourses() {
         localStorage.setItem("courses", JSON.stringify(courses));
     }
+
+    function saveStudents() {
+        localStorage.setItem("students", JSON.stringify(students));
+    }
+
 
     async function loadCourses() {
         const saved = localStorage.getItem("courses");
@@ -30,6 +36,18 @@ document.addEventListener("DOMContentLoaded", async function () {
         let data = await res.json();
 
         localStorage.setItem("instructors", JSON.stringify(data));
+        return data;
+    }
+
+    async function loadStudents() {
+        const saved = localStorage.getItem("students");
+        if (saved) {
+            return JSON.parse(saved);
+        }
+
+        const res = await fetch("data/students.json");
+        const data = await res.json();
+        localStorage.setItem("students", JSON.stringify(data));
         return data;
     }
 
@@ -118,7 +136,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             saveCourses();
         });
 
-        validateButton.addEventListener("click", () => handleValidate(cls, selectInstructor.value));
+        validateButton.addEventListener("click", () => handleValidate(course, cls, selectInstructor.value));
         CancelButton.addEventListener("click", () => handleCancel(cls));
 
         return tableRow;
@@ -137,7 +155,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
     }
 
-    function handleValidate(cls, selectedInstructor) {
+    function handleValidate(course, cls, selectedInstructor) {
         seatsTakenPercent = cls.takenSeats / cls.totalSeats;
 
         if (seatsTakenPercent < 0.5) {
@@ -153,6 +171,17 @@ document.addEventListener("DOMContentLoaded", async function () {
         cls.validated = true;
         cls.status = "in-progress";
 
+        for (const s of students) {
+            const index = s.pendingCourses.findIndex(c => c.crn === cls.crn);
+            if (index !== -1) {
+                s.pendingCourses.splice(index, 1);
+            }
+
+            s.inProgressCourses.push({ code: course.code, crn: cls.crn });
+
+        }
+
+        saveStudents();
         saveCourses();
         renderPendingClasses();
         displayInProgress();
@@ -163,6 +192,15 @@ document.addEventListener("DOMContentLoaded", async function () {
         for (const course of courses) {
             course.classes = course.classes.filter(cls => cls.crn !== cancelClass.crn);
         }
+
+        for (const s of students) {
+            const index = s.pendingCourses.findIndex(c => c.crn === cls.crn);
+            if (index !== -1) {
+                s.pendingCourses.splice(index, 1);
+            }
+        }
+
+        saveStudents();
         saveCourses();
         renderPendingClasses(courses);
     }
@@ -175,6 +213,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     courses = await loadCourses();
     instructors = await loadInstructors();
+    students = await loadStudents();
 
     console.log(courses);
     console.log(instructors);
