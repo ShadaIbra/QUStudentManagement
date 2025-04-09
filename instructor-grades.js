@@ -46,7 +46,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     function renderStudents() {
-
         const courseDetails = getCourseAndClass(crn);
         // Display the course header with course name and CRN
         const courseHeader = document.querySelector("#course-header");
@@ -57,11 +56,9 @@ document.addEventListener("DOMContentLoaded", async function () {
         // Filter students who are enrolled in this course (pending, in-progress, or completed)
         const enrolledStudents = students.filter(student => {
             const isInProgress = student.inProgressCourses.some(c => c.crn === crn);
-            const isCompleted = student.completedCourses.some(c => c.crn === crn);
-            const isPending = student.pendingCourses.some(c => c.crn === crn);
 
             // Return students who are either pending, in-progress, or completed the course
-            return isPending || isInProgress || isCompleted;
+            return isInProgress;
         });
 
         // If no students are enrolled in the course, display a message
@@ -71,8 +68,8 @@ document.addEventListener("DOMContentLoaded", async function () {
             // Map over each enrolled student and generate a table row with the student's grade options
             tbody.innerHTML = enrolledStudents.map(student => {
                 // Find the completed course for this student and CRN
-                const completedCourse = student.completedCourses.find(c => c.crn === crn);
-                const currentGrade = completedCourse ? completedCourse.grade : '';
+                const inProgressCourses = student.inProgressCourses.find(c => c.crn === crn);
+                const currentGrade = inProgressCourses ? inProgressCourses.grade : '';
 
                 // Generate the row with the student's email, grade, and grade dropdown
                 return `
@@ -102,10 +99,10 @@ document.addEventListener("DOMContentLoaded", async function () {
 
                 const student = students.find(s => s.email === email);
 
-                student.completedCourses = student.completedCourses.filter(c => c.crn !== crn);
+                student.inProgressCourses = student.inProgressCourses.filter(c => c.crn !== crn);
 
                 if (newGrade) {
-                    student.completedCourses.push({ code: courseDetails.course.code, crn: crn, grade: newGrade });
+                    student.inProgressCourses.push({ code: courseDetails.course.code, crn: crn, grade: newGrade });
                 }
 
                 // Save updated students array

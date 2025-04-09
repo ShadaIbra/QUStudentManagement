@@ -7,7 +7,8 @@
         "inProgressCourses": [
             {
                 "code": "PY201",
-                "crn": "2001"
+                "crn": "2001",
+                "grade": "A"
             }
         ],
         "completedCourses": [
@@ -31,7 +32,8 @@
         "inProgressCourses": [
             {
                 "code": "PY201",
-                "crn": "2001"
+                "crn": "2001",
+                "grade": "B"
             }
         ],
         "completedCourses": [
