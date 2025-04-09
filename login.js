@@ -61,6 +61,8 @@ document.addEventListener("DOMContentLoaded", async function () {
             else if (userType === "instructor") {
                 window.location.href = "instructor-main.html";
             }
+        } else {
+            alert("Login failed: Invalid email, password, or user type.");
         }
 
     }
@@ -74,5 +76,12 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
 
     initializeLogin();
+
+    // localStorage.removeItem("categories");
+    // localStorage.removeItem("courses");
+    // localStorage.removeItem("currentCRN");
+    // localStorage.removeItem("instructors");
+    // localStorage.removeItem("loggedInUser");
+    // localStorage.removeItem("students");
 
 });
