@@ -49,6 +49,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         const courseCategory = document.createElement("td");
         courseCategory.innerHTML = course.category;
+        courseCategory.classList.add("hide-col");
         tableRow.appendChild(courseCategory);
 
         const courseCode = document.createElement("td");

@@ -64,7 +64,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         } else {
             alert("Login failed: Invalid email, password, or user type.");
         }
-
     }
 
     document.querySelectorAll(".user > button").forEach(form => {

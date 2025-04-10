@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 <td>${c.course.courseName}</td>
                 <td>${c.course.category}</td>
                 <td>${c.class.crn}</td>
-                <td>${c.class.instructor}</td>
+                <td class="hide-col">${c.class.instructor}</td>
                 <td>${c.grade}</td>
               </tr>
             `).join('');

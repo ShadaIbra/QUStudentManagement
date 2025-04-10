@@ -4,8 +4,7 @@
         "category": "Web Development",
         "code": "JS101",
         "prereqsCode": [
-            "PY201",
-            "PY201"
+            "DB301"
         ],
         "preferenceOpen": true,
         "preferenceList": [

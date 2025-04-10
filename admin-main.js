@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", async function () {
-
     let courses = [];
     let instructors = [];
     let students = [];
@@ -76,10 +75,12 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         const courseName = document.createElement("td");
         courseName.innerHTML = course.courseName;
+        courseName.classList.add("hide-col");
         tableRow.appendChild(courseName);
 
         const courseCategory = document.createElement("td");
         courseCategory.innerHTML = course.category;
+        courseCategory.classList.add("hide-col");
         tableRow.appendChild(courseCategory);
 
         const classCRN = document.createElement("td");
@@ -116,6 +117,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         const classStatus = document.createElement("td");
         classStatus.innerHTML = `${cls.totalSeats - cls.takenSeats} of ${cls.totalSeats} seats remaining`;
+        classStatus.classList.add("hide-col");
         tableRow.appendChild(classStatus);
 
         const buttonCol = document.createElement("td");

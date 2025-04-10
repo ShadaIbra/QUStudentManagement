@@ -41,7 +41,6 @@ nav {
 nav a {
     text-decoration: none;
     color: var(--text-color-dark);
-
 }
 
 body {
@@ -311,4 +310,43 @@ label {
 
 .hide-validation {
     display: none;
+}
+
+.small-logo {
+    display: none;
+}
+
+.big-logo {
+    display: show;
+}
+
+@media (max-width: 600px) {
+    header {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    nav {
+        align-self: center;
+    }
+
+    #courses-cards {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .hide-col {
+        display: none;
+    }
+
+    .big-logo {
+        display: none;
+    }
+
+    .small-logo {
+        display: inline-block;
+    }
 }
