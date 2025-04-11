@@ -2,13 +2,43 @@
     {
         "email": "s123@gmail.com",
         "name": "Shada",
-        "id": 1234,
+        "id": 123,
+        "pendingCourses": [],
+        "inProgressCourses": [
+            {
+                "code": "JS101",
+                "crn": "1001",
+                "grade": ""
+            },
+            {
+                "code": "JS202",
+                "crn": "6001",
+                "grade": ""
+            }
+        ],
+        "completedCourses": [
+            {
+                "code": "PY201",
+                "crn": "2001",
+                "grade": "A"
+            },
+            {
+                "code": "CC101",
+                "crn": "7001",
+                "grade": "B"
+            }
+        ]
+    },
+    {
+        "email": "s124@gmail.com",
+        "name": "Adiba",
+        "id": 124,
         "pendingCourses": [],
         "inProgressCourses": [
             {
                 "code": "PY201",
                 "crn": "2001",
-                "grade": "A"
+                "grade": ""
             }
         ],
         "completedCourses": [
@@ -20,27 +50,27 @@
         ]
     },
     {
-        "email": "s124@gmail.com",
-        "name": "Adiba",
-        "id": 5678,
+        "email": "s125@gmail.com",
+        "name": "Hala",
+        "id": 125,
         "pendingCourses": [
             {
-                "code": "PY201",
-                "crn": "2001"
+                "code": "DB301",
+                "crn": "3001"
             }
         ],
         "inProgressCourses": [
             {
                 "code": "PY201",
                 "crn": "2001",
-                "grade": "B"
+                "grade": ""
             }
         ],
         "completedCourses": [
             {
                 "code": "PY201",
                 "crn": "2001",
-                "grade": "B"
+                "grade": "A"
             }
         ]
     }

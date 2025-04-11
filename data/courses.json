@@ -3,9 +3,7 @@
         "courseName": "JavaScript Fundamentals",
         "category": "Web Development",
         "code": "JS101",
-        "prereqsCode": [
-            "DB301"
-        ],
+        "prereqsCode": [],
         "preferenceOpen": true,
         "preferenceList": [
             "Shada",
@@ -43,7 +41,7 @@
                 "instructor": "Shada",
                 "totalSeats": 40,
                 "takenSeats": 35,
-                "status": "in-progress",
+                "status": "completed",
                 "validated": true
             }
         ]
@@ -73,7 +71,7 @@
                 "crn": "3002",
                 "instructor": "Shada",
                 "totalSeats": 20,
-                "takenSeats": 11,
+                "takenSeats": 9,
                 "status": "pending",
                 "validated": false
             }
@@ -86,8 +84,7 @@
         "prereqsCode": [],
         "preferenceOpen": true,
         "preferenceList": [
-            "Noura",
-            "Shada"
+            "Hala"
         ],
         "classes": [
             {
@@ -97,6 +94,70 @@
                 "takenSeats": 25,
                 "status": "pending",
                 "validated": false
+            }
+        ]
+    },
+    {
+        "courseName": "Machine Learning",
+        "category": "Artificial Intelligence",
+        "code": "ML301",
+        "prereqsCode": [
+            "DB301"
+        ],
+        "preferenceOpen": false,
+        "preferenceList": [],
+        "classes": [
+            {
+                "crn": "5001",
+                "instructor": "",
+                "totalSeats": 30,
+                "takenSeats": 15,
+                "status": "pending",
+                "validated": true
+            }
+        ]
+    },
+    {
+        "courseName": "Frontend Frameworks",
+        "category": "Web Development",
+        "code": "JS202",
+        "prereqsCode": [],
+        "preferenceOpen": true,
+        "preferenceList": [
+            "Adiba",
+            "Yara"
+        ],
+        "classes": [
+            {
+                "crn": "6001",
+                "instructor": "Hala",
+                "totalSeats": 20,
+                "takenSeats": 10,
+                "status": "in-progress",
+                "validated": true
+            }
+        ]
+    },
+    {
+        "courseName": "Introduction to Cloud Computing",
+        "category": "Cloud & DevOps",
+        "code": "CC101",
+        "prereqsCode": [
+            "PY201"
+        ],
+        "preferenceOpen": true,
+        "preferenceList": [
+            "Adiba",
+            "Hala"
+        ],
+        "classes": [
+            {
+                "crn": "7001",
+                "instructor": "Shada",
+                "totalSeats": 30,
+                "takenSeats": 18,
+                "status": "completed",
+                "validated": true
             }
         ]
     }

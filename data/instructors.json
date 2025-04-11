@@ -2,24 +2,34 @@
     {
         "email": "i123@gmail.com",
         "name": "Shada",
-        "expertiseAreas": ["Database Systems", "JavaScript", "Frontend"]
+        "expertiseAreas": [
+            "Database Systems",
+            "UI/UX Design",
+            "Machine Learning"
+        ]
     },
     {
         "email": "i124@gmail.com",
         "name": "Adiba",
-        "expertiseAreas": ["Web Development", "Database Systems", "Backend"]
-        
+        "expertiseAreas": [
+            "Database Systems",
+            "UI/UX Design"
+        ]
     },
     {
         "email": "i125@gmail.com",
         "name": "Hala",
-        "expertiseAreas": ["Programming", "Database Systems", "Algorithms"]
-        
+        "expertiseAreas": [
+            "Database Systems",
+            "Machine Learning"
+        ]
     },
     {
         "email": "i126@gmail.com",
         "name": "Yara",
-        "expertiseAreas": ["Database Systems", "Java", "Software Engineering"]
-        
+        "expertiseAreas": [
+            "UI/UX Design",
+            "Machine Learning"
+        ]
     }
 ]
