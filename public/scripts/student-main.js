@@ -125,9 +125,9 @@ document.addEventListener("DOMContentLoaded", async function () {
                 student.pendingCourses.splice(index, 1);
             }
 
-            if (!student.inProgressCourses.some(c => c.crn === cls.crn)) {
-                student.inProgressCourses.push({ code: course.code, crn: cls.crn });
-            }
+            // if (!student.inProgressCourses.some(c => c.crn === cls.crn)) {
+            //     student.inProgressCourses.push({ code: course.code, crn: cls.crn });
+            // }
 
         } else {
             if (!hasPassedPrereqs) {
