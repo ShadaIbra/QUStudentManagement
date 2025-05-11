@@ -163,7 +163,7 @@ async function main() {
 
     // Assign courses to students
     for (const studentId of studentIds) {
-        const pending = faker.helpers.arrayElements(unvalidatedClasses, 4);
+        const pending = faker.helpers.arrayElements(unvalidatedClasses, 5);
         for (const c of pending) {
             try {
                 await prisma.pendingCourse.create({
@@ -187,7 +187,7 @@ async function main() {
             } catch { }
         }
 
-        const completed = faker.helpers.arrayElements(validatedClasses, 25);
+        const completed = faker.helpers.arrayElements(validatedClasses, 30);
         for (const c of completed) {
             try {
                 await prisma.completedCourse.create({

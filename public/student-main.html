@@ -4,9 +4,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Instructor Preference</title>
+  <title>Student Main</title>
   <link rel="stylesheet" href="styles/styles.css" />
-  <script src="instructor-preference.js"></script>
+  <script type="module" src="scripts/student-main.js"></script>
 </head>
 
 <body>
@@ -14,7 +14,7 @@
     <img class="small-logo" src="media/QULogo-small.png" alt="QU Logo" />
     <img class="big-logo" src="media/QULogo.png" alt="QU Logo" />
     <nav>
-      <a href="instructor-main.html">Home</a>
+      <a id="courses-btn" href="student-courses.html">Courses</a>
       <a id="logout-btn" href="login.html">Logout</a>
     </nav>
   </header>
@@ -36,6 +36,8 @@
               <th>Name</th>
               <th class="hide-col">Category</th>
               <th>CRN</th>
+              <th class="hide-col">Instructor</th>
+              <th class="hide-col">Status</th>
               <th></th>
             </tr>
           </thead>
@@ -44,13 +46,9 @@
               <td>Course1</td>
               <td>Computer Science</td>
               <td>1234</td>
-              <td><button>Interested</button></td>
-            </tr>
-            <tr>
-              <td>Course1</td>
-              <td>Computer Science</td>
-              <td>1234</td>
-              <td><button>Interested</button></td>
+              <td>Shada</td>
+              <td>2 of 20 seats remaining</td>
+              <td><button>Register</button></td>
             </tr> -->
           </tbody>
         </table>
