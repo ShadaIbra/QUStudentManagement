@@ -1,0 +1,147 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  // output   = "./client"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum UserType {
+  ADMIN
+  STUDENT
+  INSTRUCTOR
+}
+
+model User {
+  id       String   @id @default(cuid())
+  email    String   @unique
+  password String
+  userType UserType
+
+  instructor Instructor?
+  student    Student?
+  admin      Admin?
+}
+
+model Instructor {
+  id   String @id
+  name String
+
+  user User @relation(fields: [id], references: [id])
+
+  expertiseAreas ExpertiseArea[] @relation("InstructorExpertise")
+  classes        Class[]
+
+  preferredCourses Course[] @relation("CoursePreference")
+}
+
+model ExpertiseArea {
+  id          String       @id @default(cuid())
+  area        String
+  instructors Instructor[] @relation("InstructorExpertise")
+}
+
+model Admin {
+  id   String @id
+  name String
+
+  user User @relation(fields: [id], references: [id], onDelete: Cascade)
+}
+
+model Student {
+  id   String @id
+  name String
+
+  user User @relation(fields: [id], references: [id], onDelete: Cascade)
+
+  pendingCourses    PendingCourse[]
+  inProgressCourses InProgressCourse[]
+  completedCourses  CompletedCourse[]
+}
+
+model Course {
+  code String @id
+  name String
+
+  coursePrerequisites CoursePrerequisite[] @relation("CoursePrerequisites_course")
+  prerequisiteFor     CoursePrerequisite[] @relation("CoursePrerequisites_prerequisite")
+
+  preferenceOpen Boolean      @default(true)
+  preferenceList Instructor[] @relation("CoursePreference")
+
+  categoryName String
+  category     Category @relation(fields: [categoryName], references: [categoryName])
+
+  pendingStudents    PendingCourse[]
+  inProgressStudents InProgressCourse[]
+  completedStudents  CompletedCourse[]
+
+  Class Class[]
+}
+
+model CoursePrerequisite {
+  courseCode       String
+  prerequisiteCode String
+
+  course       Course @relation("CoursePrerequisites_course", fields: [courseCode], references: [code])
+  prerequisite Course @relation("CoursePrerequisites_prerequisite", fields: [prerequisiteCode], references: [code])
+
+  @@id([courseCode, prerequisiteCode])
+}
+
+model Category {
+  categoryName String   @id
+  courses      Course[]
+}
+
+model PendingCourse {
+  studentId  String
+  courseCode String
+
+  student Student @relation(fields: [studentId], references: [id])
+  course  Course  @relation(fields: [courseCode], references: [code])
+
+  @@id([studentId, courseCode])
+}
+
+model InProgressCourse {
+  studentId  String
+  courseCode String
+
+  student Student @relation(fields: [studentId], references: [id])
+  course  Course  @relation(fields: [courseCode], references: [code])
+
+  @@id([studentId, courseCode])
+}
+
+model CompletedCourse {
+  studentId  String
+  courseCode String
+
+  student Student @relation(fields: [studentId], references: [id])
+  course  Course  @relation(fields: [courseCode], references: [code])
+
+  @@id([studentId, courseCode])
+}
+
+enum Status {
+  COMPLETED
+  INPROGRESS
+  PENDING
+}
+
+model Class {
+  crn          String     @id @default(uuid())
+  instructor   Instructor @relation(fields: [instructorId], references: [id])
+  instructorId String
+  totalSeats   Int
+  status       Status
+  validated    Boolean    @default(false)
+  code         String
+  course       Course     @relation(fields: [code], references: [code])
+}
