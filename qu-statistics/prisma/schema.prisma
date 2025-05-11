@@ -95,7 +95,7 @@ model CoursePrerequisite {
 }
 
 model Category {
-  categoryName String   @id
+  categoryName String   @id @default(cuid())
   courses      Course[]
 }
 
@@ -136,12 +136,13 @@ enum Status {
 }
 
 model Class {
-  crn          String     @id @default(uuid())
-  instructor   Instructor @relation(fields: [instructorId], references: [id])
-  instructorId String
+  crn          String      @id
+  instructor   Instructor? @relation(fields: [instructorId], references: [id])
+  instructorId String?
   totalSeats   Int
-  status       Status
-  validated    Boolean    @default(false)
+  status       Status      @default(PENDING)
+  validated    Boolean     @default(false)
   code         String
-  course       Course     @relation(fields: [code], references: [code])
+  course       Course      @relation(fields: [code], references: [code])
 }
+
