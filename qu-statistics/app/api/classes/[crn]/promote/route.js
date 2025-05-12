@@ -14,6 +14,8 @@ export async function OPTIONS() {
     });
 }
 
+// To move the students of the class with this crn from pending students 
+// to in progress students in the ‘admin-main’ when the admin validates a class
 export async function PATCH(req, { params }) {
     const { crn } = params;
     try {

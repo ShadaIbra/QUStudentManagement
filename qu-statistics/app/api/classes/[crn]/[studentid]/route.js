@@ -14,6 +14,7 @@ export async function OPTIONS() {
     });
 }
 
+// To update the grade of the student with this student id in the class with this id 
 export async function PATCH(request, { params }) {
     const { crn, studentid } = params;
     const { grade } = await request.json();

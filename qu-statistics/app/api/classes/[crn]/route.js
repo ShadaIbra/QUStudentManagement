@@ -14,6 +14,8 @@ export async function OPTIONS() {
     });
 }
 
+// Update the Class with this crn for ‘student-main’ to increase the takenseats.
+// Also used in ‘admin-main’ to validate, change status, change instructor.
 export async function PATCH(request, { params }) {
     const crn = params.crn;
     const body = await request.json();
@@ -33,7 +35,7 @@ export async function PATCH(request, { params }) {
     }
 }
 
-// Get the class with this crn (for instructor-grades)
+// Get the Class with this crn for ‘instructor-grades’ to list all students in this class
 export async function GET(_, { params }) {
     const { crn } = params;
 
@@ -58,8 +60,7 @@ export async function GET(_, { params }) {
     }
 }
 
-// Patch the class with this crn (for validating in admin-main)
-
+// Deleting the Class with this crn in ‘admin-main’ when they cancel a class
 export async function DELETE(_, { params }) {
     const crn = params.crn;
 

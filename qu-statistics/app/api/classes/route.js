@@ -13,7 +13,7 @@ export async function OPTIONS() {
     });
 }
 
-// Post a new class
+// Create a new class in ‘admin-manage’
 export async function POST(req) {
     try {
         const body = await req.json();

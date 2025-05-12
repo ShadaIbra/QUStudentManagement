@@ -36,7 +36,6 @@ export async function GET(_, { params }) {
     }
 }
 
-
 export async function POST(req, { params }) {
     const { instructorid } = await params;
     const { courseCode } = await req.json();

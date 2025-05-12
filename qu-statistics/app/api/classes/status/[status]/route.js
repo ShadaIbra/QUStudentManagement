@@ -6,6 +6,7 @@ const headers = {
     'Access-Control-Allow-Headers': 'Content-Type',
 };
 
+// Get all the classes with this status
 export async function GET(request, { params }) {
     const { status } = await params;
 

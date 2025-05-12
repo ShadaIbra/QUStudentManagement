@@ -1,4 +1,3 @@
-// Get all categories (for admin-manage)
 import { getAllCategories } from '@/repos/categories';
 
 const headers = {
@@ -14,6 +13,7 @@ export async function OPTIONS() {
     });
 }
 
+// Get all categories to list them for ‘admin-manage’ to create a course
 export async function GET() {
     try {
         const categories = await getAllCategories();
