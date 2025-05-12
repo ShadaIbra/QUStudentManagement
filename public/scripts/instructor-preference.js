@@ -5,50 +5,45 @@ document.addEventListener("DOMContentLoaded", async function () {
     let courses = [];
     let instructor;
 
-    function saveCourses() {
-        localStorage.setItem("courses", JSON.stringify(courses));
+    async function addPreference(courseCode) {
+        await fetch(`http://localhost:3000/api/instructors/${instructorId}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ courseCode }),
+        });
+    }
+
+    async function deletePreference(courseCode) {
+        await fetch(`http://localhost:3000/api/instructors/${instructorId}`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ courseCode }),
+        });
     }
 
     async function loadCourses() {
-        const saved = localStorage.getItem("courses");
-        if (saved) {
-            return JSON.parse(saved);
-        }
+        const response = await fetch(`http://localhost:3000/api/courses/preference`);
+        const courses = await response.json();
 
-        const res = await fetch("data/courses.json");
-        let data = await res.json();
-        localStorage.setItem("courses", JSON.stringify(data));
-
-        return data;
+        return courses;
     }
 
-    async function loadInstructors() {
-        const saved = localStorage.getItem("instructors");
-        if (saved) {
-            return JSON.parse(saved);
-        }
+    async function loadInstructor() {
+        const response = await fetch(`http://localhost:3000/api/instructors/${instructorId}`);
+        const instructor = await response.json();
 
-        const res = await fetch("data/instructors.json");
-        let data = await res.json();
-
-        localStorage.setItem("instructors", JSON.stringify(data));
-        return data;
-    }
-
-    async function getInstructor() {
-        const instructors = await loadInstructors();
-        return instructors.find(instructor => instructor.email === loggedInUser.email);
+        return instructor;
     }
 
     function renderCourse(course) {
         const tableRow = document.createElement("tr");
 
         const courseName = document.createElement("td");
-        courseName.innerHTML = course.courseName;
+        courseName.innerHTML = course.nameame;
         tableRow.appendChild(courseName);
 
         const courseCategory = document.createElement("td");
-        courseCategory.innerHTML = course.category;
+        courseCategory.innerHTML = course.categoryName;
         courseCategory.classList.add("hide-col");
         tableRow.appendChild(courseCategory);
 
@@ -63,7 +58,9 @@ document.addEventListener("DOMContentLoaded", async function () {
         interestButton.innerHTML = "Interest";
         buttonCol.appendChild(interestButton);
 
-        if (course.preferenceList.includes(instructor.name)) {
+        const preferenceList = course.preferenceList.map(i => i.id);
+
+        if (preferenceList.includes(instructor.id)) {
             interestButton.classList.add("interested");
             interestButton.innerHTML = "Interested";
         }
@@ -73,27 +70,29 @@ document.addEventListener("DOMContentLoaded", async function () {
         return tableRow;
     }
 
-    function handleInterest(event, course) {
+    async function handleInterest(event, course) {
         const interestButton = event.target;
+        const preferenceList = course.preferenceList.map(i => i.id);
 
         if (interestButton.classList.contains("interested")) {
             interestButton.classList.remove("interested");
             interestButton.innerHTML = "Interest";
 
-            const index = course.preferenceList.indexOf(instructor.name);
-            if (index !== -1) {
-                course.preferenceList.splice(index, 1);
+            if (preferenceList.includes(instructor.id)) {
+                deletePreference(course.code);
             }
+
 
         } else {
             interestButton.classList.add("interested");
             interestButton.innerHTML = "Interested";
 
-            if (!course.preferenceList.includes(instructor.name)) {
-                course.preferenceList.push(instructor.name);
+            if (!preferenceList.includes(instructor.id)) {
+                addPreference(course.code);
             }
         }
-        saveCourses();
+        instructor = await loadInstructor();
+        courses = await loadCourses();
         renderCourses(courses);
     }
 
@@ -110,8 +109,8 @@ document.addEventListener("DOMContentLoaded", async function () {
         const search = document.querySelector("#name-search").value.toLowerCase().trim();
 
         const filteredCourses = courses.filter(course =>
-            course.courseName.toLowerCase().includes(search) ||
-            course.category.toLowerCase().includes(search));
+            course.name.toLowerCase().includes(search) ||
+            course.categoryName.toLowerCase().includes(search));
 
         console.log(filteredCourses);
         renderCourses(filteredCourses);
@@ -124,7 +123,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         window.location.href = `instructor-main.html?id=${instructorId}`;
     });
 
-    instructor = await getInstructor();
+    instructor = await loadInstructor();
     courses = await loadCourses();
 
     renderCourses(courses);
