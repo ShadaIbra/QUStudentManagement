@@ -1,22 +1,10 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import { getAverageGradePerCourse } from "@/app/actions";
 
-const AverageGradePerCourse = () => {
-  const [averageGrades, setAverageGrades] = useState([]);
-
-  useEffect(() => {
-    const fetchAverageGrades = async () => {
-      const data = await getAverageGradePerCourse();
-      setAverageGrades(data);
-    };
-
-    fetchAverageGrades();
-  }, []);
+export default async function AverageGradePerCourse() {
+  const averageGrades = await getAverageGradePerCourse();
 
   return (
-    <div className="average-grade">
+    <div className="avg-grade">
       <h3>Average Grade Per Course</h3>
       <ul>
         {averageGrades.map((item, index) => (
@@ -27,6 +15,4 @@ const AverageGradePerCourse = () => {
       </ul>
     </div>
   );
-};
-
-export default AverageGradePerCourse;
+}

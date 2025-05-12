@@ -1,19 +1,7 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import { getTop3InstructorsByClasses } from "@/app/actions";
 
-const Top3Instructors = () => {
-  const [topInstructors, setTopInstructors] = useState([]);
-
-  useEffect(() => {
-    const fetchTopInstructors = async () => {
-      const result = await getTop3InstructorsByClasses();
-      setTopInstructors(result);
-    };
-
-    fetchTopInstructors();
-  }, []);
+export default async function Top3Instructors() {
+  const topInstructors = await getTop3InstructorsByClasses();
 
   return (
     <div className="top-instructors">
@@ -27,6 +15,4 @@ const Top3Instructors = () => {
       </ul>
     </div>
   );
-};
-
-export default Top3Instructors;
+}

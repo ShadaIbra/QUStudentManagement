@@ -1,3 +1,5 @@
+"use server";
+
 import { Prisma, PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
@@ -72,33 +74,24 @@ export const getTotalStudentsPerCourse = async () => {
   }));
 };
 
-export const getTop3Courses = async () => {
+export async function getTop3Courses() {
   const courses = await prisma.course.findMany({
     include: {
+      Class: true,
+    },
+    orderBy: {
       Class: {
-        include: {
-          inProgressStudents: true,
-          completedStudents: true,
-        },
+        _count: "desc",
       },
     },
+    take: 3,
   });
 
-  const coursePopularity = courses.map((course) => ({
-    courseCode: course.code,
-    studentCount: course.Class.reduce(
-      (count, _class) =>
-        count +
-        _class.inProgressStudents.length +
-        _class.completedStudents.length,
-      0
-    ),
+  return courses.map((course) => ({
+    name: course.name,
+    classCount: course.Class.length,
   }));
-
-  return coursePopularity
-    .sort((a, b) => b.studentCount - a.studentCount)
-    .slice(0, 3);
-};
+}
 
 export const getFailureRatePerCourse = async () => {
   const courses = await prisma.course.findMany({
@@ -214,11 +207,11 @@ export const getTop3InstructorsByClasses = async () => {
       id: true,
       name: true,
       _count: {
-        select: { classes: true },
+        select: { Class: true },
       },
     },
     orderBy: {
-      classes: {
+      Class: {
         _count: "desc",
       },
     },

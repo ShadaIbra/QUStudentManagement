@@ -1,19 +1,7 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import { getTotalStudentsPerCourse } from "@/app/actions";
 
-const TotalStudentsPerCourse = () => {
-  const [studentsPerCourse, setStudentsPerCourse] = useState([]);
-
-  useEffect(() => {
-    const fetchStudentsPerCourse = async () => {
-      const data = await getTotalStudentsPerCourse();
-      setStudentsPerCourse(data);
-    };
-
-    fetchStudentsPerCourse();
-  }, []);
+export default async function TotalStudentsPerCourse() {
+  const studentsPerCourse = await getTotalStudentsPerCourse();
 
   return (
     <div className="students-course">
@@ -27,6 +15,4 @@ const TotalStudentsPerCourse = () => {
       </ul>
     </div>
   );
-};
-
-export default TotalStudentsPerCourse;
+}

@@ -1,19 +1,7 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import { getTotalStudentsPerYear } from "@/app/actions";
 
-const TotalStudentsPerYear = () => {
-  const [studentsPerYear, setStudentsPerYear] = useState([]);
-
-  useEffect(() => {
-    const fetchStudentsPerYear = async () => {
-      const data = await getTotalStudentsPerYear();
-      setStudentsPerYear(data);
-    };
-
-    fetchStudentsPerYear();
-  }, []);
+export default async function TotalStudentsPerYear() {
+  const studentsPerYear = await getTotalStudentsPerYear();
 
   return (
     <div className="students-year">
@@ -27,6 +15,4 @@ const TotalStudentsPerYear = () => {
       </ul>
     </div>
   );
-};
-
-export default TotalStudentsPerYear;
+}

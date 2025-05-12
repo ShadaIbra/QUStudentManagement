@@ -1,32 +1,27 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import { getTop3Courses } from "@/app/actions";
 
-const TopCourses = () => {
-  const [topCourses, setTopCourses] = useState([]);
-
-  useEffect(() => {
-    const fetchTopCourses = async () => {
-      const courses = await getTop3Courses();
-      setTopCourses(courses);
-    };
-
-    fetchTopCourses();
-  }, []);
+export default async function Top3Courses() {
+  const data = await getTop3Courses();
 
   return (
     <div className="top-courses">
-      <h3>Top 3 Most Popular Courses</h3>
-      <ul>
-        {topCourses.map((course, index) => (
-          <li key={index}>
-            {course.courseCode} - {course.studentCount} students
-          </li>
-        ))}
-      </ul>
+      <h2>Top 3 Courses by Class Count</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Course</th>
+            <th>Number of Classes</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((course, idx) => (
+            <tr key={idx}>
+              <td>{course.name}</td>
+              <td>{course.classCount}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
-};
-
-export default TopCourses;
+}

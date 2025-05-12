@@ -1,19 +1,7 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import { getFailureRatePerCategory } from "@/app/actions";
 
-const FailureRatePerCategory = () => {
-  const [failureRates, setFailureRates] = useState([]);
-
-  useEffect(() => {
-    const fetchFailureRates = async () => {
-      const data = await getFailureRatePerCategory();
-      setFailureRates(data);
-    };
-
-    fetchFailureRates();
-  }, []);
+export default async function FailureRatePerCategory() {
+  const failureRates = await getFailureRatePerCategory();
 
   return (
     <div className="failures-category">
@@ -27,6 +15,4 @@ const FailureRatePerCategory = () => {
       </ul>
     </div>
   );
-};
-
-export default FailureRatePerCategory;
+}

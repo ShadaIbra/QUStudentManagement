@@ -1,31 +1,27 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import { getAverageClassSizePerCourse } from "@/app/actions";
 
-const AverageClassSize = () => {
-  const [data, setData] = useState([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await getAverageClassSizePerCourse();
-      setData(result);
-    };
-    fetchData();
-  }, []);
+export default async function AverageClassSize() {
+  const data = await getAverageClassSizePerCourse();
 
   return (
-    <div className="average-size">
-      <h3>Top 5 Courses by Average Class Size</h3>
-      <ul>
-        {data.map((course, index) => (
-          <li key={index}>
-            {course.name} – {course.avgSize} seats per class
-          </li>
-        ))}
-      </ul>
+    <div className="avg-size">
+      <h2>Top 5 Courses by Avg Class Size</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Course</th>
+            <th>Average Size</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((course, i) => (
+            <tr key={i}>
+              <td>{course.courseName}</td>
+              <td>{course.avgSize}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
-};
-
-export default AverageClassSize;
+}

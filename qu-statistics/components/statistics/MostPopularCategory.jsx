@@ -1,18 +1,7 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import { getMostPopularCategory } from "@/app/actions";
 
-const MostPopularCategory = () => {
-  const [data, setData] = useState(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await getMostPopularCategory();
-      setData(result);
-    };
-    fetchData();
-  }, []);
+export default async function MostPopularCategory() {
+  const data = await getMostPopularCategory();
 
   if (!data) return null;
 
@@ -24,6 +13,4 @@ const MostPopularCategory = () => {
       </p>
     </div>
   );
-};
-
-export default MostPopularCategory;
+}

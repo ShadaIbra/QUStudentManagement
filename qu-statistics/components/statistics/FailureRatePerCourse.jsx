@@ -1,19 +1,7 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import { getFailureRatePerCourse } from "@/app/actions";
 
-const FailureRatePerCourse = () => {
-  const [failureRates, setFailureRates] = useState([]);
-
-  useEffect(() => {
-    const fetchFailureRates = async () => {
-      const data = await getFailureRatePerCourse();
-      setFailureRates(data);
-    };
-
-    fetchFailureRates();
-  }, []);
+export default async function FailureRatePerCourse() {
+  const failureRates = await getFailureRatePerCourse();
 
   return (
     <div className="failures-course">
@@ -27,6 +15,4 @@ const FailureRatePerCourse = () => {
       </ul>
     </div>
   );
-};
-
-export default FailureRatePerCourse;
+}
