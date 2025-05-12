@@ -4,17 +4,18 @@ import { Prisma, PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export const getTotalStudentsPerYear = async () => {
-  const students = await prisma.student.groupBy({
-    by: ["createdAt"],
-    _count: {
+  const students = await prisma.student.findMany({
+    select: {
       id: true,
+      name: true,
+      user: true,
+      pendingCourses: true,
+      inProgressCourses: true,
+      completedCourses: true,
     },
   });
 
-  return students.map((student) => ({
-    year: new Date(student.createdAt).getFullYear(),
-    studentCount: student._count.id,
-  }));
+  return students;
 };
 
 export const getTotalStudentsPerCategory = async () => {
@@ -203,22 +204,20 @@ export const getAverageGradePerCourse = async () => {
 
 export const getTop3InstructorsByClasses = async () => {
   const instructors = await prisma.instructor.findMany({
-    select: {
-      id: true,
-      name: true,
-      _count: {
-        select: { Class: true },
-      },
+    include: {
+      classes: true,
     },
-    orderBy: {
-      Class: {
-        _count: "desc",
-      },
-    },
-    take: 3,
   });
 
-  return instructors;
+  const instructorClassCounts = instructors.map((instructor) => ({
+    id: instructor.id,
+    name: instructor.name,
+    classCount: instructor.classes.length,
+  }));
+
+  instructorClassCounts.sort((a, b) => b.classCount - a.classCount);
+
+  return instructorClassCounts.slice(0, 3);
 };
 
 export const getMostPopularCategory = async () => {
