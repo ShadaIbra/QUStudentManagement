@@ -1,17 +1,17 @@
-// some will be actions instead of api
+"use server";
 
 import { prisma } from "@/lib/prisma";
 
 export async function getStudentCountPerYear() {
   return await prisma.student.groupBy({
-    by: ['year'],
+    by: ["year"],
     _count: true,
   });
 }
 
 export async function getStudentCountPerCategory() {
   return await prisma.course.groupBy({
-    by: ['category'],
+    by: ["category"],
     _count: {
       classes: true,
     },
@@ -20,7 +20,7 @@ export async function getStudentCountPerCategory() {
 
 export async function getStudentCountPerCourse() {
   return await prisma.grade.groupBy({
-    by: ['classId'],
+    by: ["classId"],
     _count: true,
   });
 }
@@ -30,7 +30,7 @@ export async function getTop3Courses() {
     take: 3,
     orderBy: {
       classes: {
-        _count: 'desc',
+        _count: "desc",
       },
     },
     include: {
@@ -46,7 +46,7 @@ export async function getTop3Instructors() {
     take: 3,
     orderBy: {
       classes: {
-        _count: 'desc',
+        _count: "desc",
       },
     },
     include: {
@@ -59,7 +59,7 @@ export async function getTop3Instructors() {
 
 export async function getFailureRatePerCourse() {
   const results = await prisma.grade.groupBy({
-    by: ['classId'],
+    by: ["classId"],
     _count: {
       _all: true,
       value: true,
@@ -75,7 +75,7 @@ export async function getFailureRatePerCourse() {
 
 export async function getAverageGradePerCourse() {
   return await prisma.grade.groupBy({
-    by: ['classId'],
+    by: ["classId"],
     _avg: {
       value: true,
     },
@@ -89,7 +89,7 @@ export async function getStudentsWithFailures() {
         lt: 50,
       },
     },
-    distinct: ['studentId'],
+    distinct: ["studentId"],
   });
 }
 
@@ -101,7 +101,7 @@ export async function getValidatedClassCounts() {
 
 export async function getClassCountPerCourse() {
   return await prisma.class.groupBy({
-    by: ['courseId'],
+    by: ["courseId"],
     _count: true,
   });
 }
