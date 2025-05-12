@@ -77,11 +77,7 @@ model Course {
   categoryName String
   category     Category @relation(fields: [categoryName], references: [categoryName])
 
-  pendingStudents    PendingCourse[]
-  inProgressStudents InProgressCourse[]
-  completedStudents  CompletedCourse[]
-
-  Class Class[]
+  Class            Class[]
 }
 
 model CoursePrerequisite {
@@ -101,32 +97,32 @@ model Category {
 
 model PendingCourse {
   studentId  String
-  courseCode String
+  classCrn String
 
-  student Student @relation(fields: [studentId], references: [id])
-  course  Course  @relation(fields: [courseCode], references: [code])
+  student  Student @relation(fields: [studentId], references: [id])
+  Class    Class  @relation(fields: [classCrn], references: [crn])
 
-  @@id([studentId, courseCode])
+  @@id([studentId, classCrn])
 }
 
 model InProgressCourse {
   studentId  String
-  courseCode String
+  classCrn String
 
-  student Student @relation(fields: [studentId], references: [id])
-  course  Course  @relation(fields: [courseCode], references: [code])
+  student  Student @relation(fields: [studentId], references: [id])
+  Class    Class  @relation(fields: [classCrn], references: [crn])
 
-  @@id([studentId, courseCode])
+  @@id([studentId, classCrn])
 }
 
 model CompletedCourse {
   studentId  String
-  courseCode String
+  classCrn String
 
-  student Student @relation(fields: [studentId], references: [id])
-  course  Course  @relation(fields: [courseCode], references: [code])
+  student  Student @relation(fields: [studentId], references: [id])
+  Class    Class  @relation(fields: [classCrn], references: [crn])
 
-  @@id([studentId, courseCode])
+  @@id([studentId, classCrn])
 }
 
 enum Status {
@@ -144,4 +140,8 @@ model Class {
   validated    Boolean     @default(false)
   code         String
   course       Course      @relation(fields: [code], references: [code])
+
+  pendingStudents    PendingCourse[]
+  inProgressStudents InProgressCourse[]
+  completedStudents  CompletedCourse[]
 }

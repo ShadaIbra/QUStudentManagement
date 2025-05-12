@@ -155,7 +155,7 @@ async function main() {
                 },
             });
 
-            const classEntry = { courseCode: course.code };
+            const classEntry = { classCrn: newClass.crn };
 
             validated ? validatedClasses.push(classEntry) : unvalidatedClasses.push(classEntry);
         }
@@ -169,10 +169,12 @@ async function main() {
                 await prisma.pendingCourse.create({
                     data: {
                         studentId,
-                        courseCode: c.courseCode,
+                        classCrn: c.classCrn,
                     },
                 });
-            } catch { }
+            } catch {
+                console.error(`Failed to assign student ${studentId} to class ${c.classCrn}:`, err);
+            }
         }
 
         const inProgress = faker.helpers.arrayElements(validatedClasses, 5);
@@ -181,10 +183,12 @@ async function main() {
                 await prisma.inProgressCourse.create({
                     data: {
                         studentId,
-                        courseCode: c.courseCode,
+                        classCrn: c.classCrn,
                     },
                 });
-            } catch { }
+            } catch {
+                console.error(`Failed to assign student ${studentId} to class ${c.classCrn}:`, err);
+            }
         }
 
         const completed = faker.helpers.arrayElements(validatedClasses, 30);
@@ -193,10 +197,12 @@ async function main() {
                 await prisma.completedCourse.create({
                     data: {
                         studentId,
-                        courseCode: c.courseCode,
+                        classCrn: c.classCrn,
                     },
                 });
-            } catch { }
+            } catch {
+                console.error(`Failed to assign student ${studentId} to class ${c.classCrn}:`, err);
+            }
         }
     }
 
