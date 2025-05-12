@@ -8,7 +8,7 @@ export default async function MostPopularCategory() {
   return (
     <div className="stat-card">
       <h2>Most Popular Category</h2>
-      <table className="popular-category-table">
+      <table className="stat-table">
         <thead>
           <tr>
             <th>Category</th>

@@ -55,32 +55,33 @@ body {
   background-color: #f9f9f9;
 }
 
-.failure-rate-table,
-.average-class-size-table,
-.average-grade-table,
-.popular-category-table {
+h1 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+h2 {
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.stat-table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
 }
 
-.failure-rate-table th,
-.failure-rate-table td,
-.average-class-size-table th,
-.average-class-size-table td,
-.average-grade-table th,
-.average-grade-table td,
-.popular-category-table th,
-.popular-category-table td {
+.stat-table th,
+.stat-table td {
   padding: 12px;
   text-align: left;
   border-bottom: 1px solid #ddd;
 }
 
-.failure-rate-table th,
-.average-class-size-table th,
-.average-grade-table th,
-.popular-category-table th {
+.stat-table th {
   background-color: #4caf50;
   color: white;
 }

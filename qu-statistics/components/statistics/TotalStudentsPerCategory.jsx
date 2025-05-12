@@ -6,13 +6,22 @@ export default async function TotalStudentsPerCategory() {
   return (
     <div className="stat-card">
       <h2>Total Students Per Course Category</h2>
-      <ul>
-        {studentsPerCategory.map((item, index) => (
-          <li key={index}>
-            {item.categoryName}: {item.studentCount} students
-          </li>
-        ))}
-      </ul>
+      <table className="stat-table">
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Total Students</th>
+          </tr>
+        </thead>
+        <tbody>
+          {studentsPerCategory.map((item, index) => (
+            <tr key={index}>
+              <td>{item.categoryName}</td>
+              <td>{item.studentCount}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }

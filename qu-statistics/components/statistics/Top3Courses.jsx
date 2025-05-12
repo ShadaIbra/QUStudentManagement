@@ -6,7 +6,7 @@ export default async function Top3Courses() {
   return (
     <div className="stat-card">
       <h2>Top 3 Courses by Class Count</h2>
-      <table>
+      <table className="stat-table">
         <thead>
           <tr>
             <th>Course</th>

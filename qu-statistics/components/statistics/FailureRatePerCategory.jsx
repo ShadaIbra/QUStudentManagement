@@ -6,7 +6,7 @@ export default async function FailureRatePerCategory() {
   return (
     <div className="stat-card">
       <h2>Failure Rate Per Course Category</h2>
-      <table className="failure-rate-table">
+      <table className="stat-table">
         <thead>
           <tr>
             <th>Category</th>

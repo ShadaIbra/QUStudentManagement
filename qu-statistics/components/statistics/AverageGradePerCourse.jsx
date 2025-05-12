@@ -6,7 +6,7 @@ export default async function AverageGradePerCourse() {
   return (
     <div className="stat-card">
       <h2>Average Grade Per Course</h2>
-      <table className="average-grade-table">
+      <table className="stat-table">
         <thead>
           <tr>
             <th>Course Code</th>

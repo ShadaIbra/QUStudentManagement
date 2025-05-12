@@ -6,7 +6,7 @@ export default async function AverageClassSize() {
   return (
     <div className="stat-card">
       <h2>Top 5 Courses by Avg Class Size</h2>
-      <table className="average-class-size-table">
+      <table className="stat-table">
         <thead>
           <tr>
             <th>Course</th>
