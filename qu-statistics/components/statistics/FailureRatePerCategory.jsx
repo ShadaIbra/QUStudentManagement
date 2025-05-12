@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import { getFailureRatePerCategory } from "@/app/actions";
 

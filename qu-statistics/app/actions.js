@@ -1,4 +1,5 @@
-import { prisma } from "./prismaClient";
+import { Prisma, PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
 
 export const getTotalStudentsPerYear = async () => {
   const students = await prisma.student.groupBy({
@@ -72,7 +73,7 @@ export const getTotalStudentsPerCourse = async () => {
 };
 
 export const getTop3Courses = async () => {
-  const courses = await prisma.Course.findMany({
+  const courses = await prisma.course.findMany({
     include: {
       Class: {
         include: {
