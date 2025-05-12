@@ -1,5 +1,4 @@
-// Get all categories (for admin-manage)
-import { getAllCategories } from '@/repos/categories';
+import { getInstructorsByExpertise } from '@/repos/instructors';
 
 const headers = {
     'Access-Control-Allow-Origin': '*',
@@ -8,21 +7,20 @@ const headers = {
 };
 
 export async function OPTIONS() {
-    return new Response(null, {
-        status: 204,
-        headers,
-    });
+    return new Response(null, { status: 204, headers });
 }
 
-export async function GET() {
+export async function GET(_, { params }) {
+    const { expertise } = params;
+
     try {
-        const categories = await getAllCategories();
-        return new Response(JSON.stringify(categories), {
+        const instructors = await getInstructorsByExpertise(expertise);
+        return new Response(JSON.stringify(instructors), {
             status: 200,
             headers,
         });
     } catch (error) {
-        console.error('Failed to fetch categories:', error);
+        console.error('Error fetching instructors by expertise:', error);
         return new Response('Server Error', {
             status: 500,
             headers,

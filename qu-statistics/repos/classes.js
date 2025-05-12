@@ -14,7 +14,10 @@ export async function getClassesByStatus(status) {
         include: {
             instructor: true,
             course: {
-                include: { coursePrerequisites: true, }
+                include: {
+                    coursePrerequisites: true,
+                    preferenceList: true,
+                }
             },
         },
     });
@@ -64,5 +67,43 @@ export async function updateStudentGrade(crn, studentId, grade) {
         data: {
             grade,
         },
+    });
+}
+
+export async function promotePendingToInProgress(classCrn) {
+    const pending = await prisma.pendingCourse.findMany({
+        where: { classCrn },
+    });
+
+    for (const entry of pending) {
+        await prisma.inProgressCourse.create({
+            data: {
+                studentId: entry.studentId,
+                classCrn: entry.classCrn,
+                grade: '-', // default grade
+            },
+        });
+
+        await prisma.pendingCourse.delete({
+            where: {
+                studentId_classCrn: {
+                    studentId: entry.studentId,
+                    classCrn: entry.classCrn,
+                },
+            },
+        });
+    }
+}
+export async function deleteClassByCrn(crn) {
+    await prisma.pendingCourse.deleteMany({ where: { classCrn: crn } });
+    await prisma.inProgressCourse.deleteMany({ where: { classCrn: crn } });
+    await prisma.completedCourse.deleteMany({ where: { classCrn: crn } });
+
+    return prisma.class.delete({ where: { crn } });
+}
+
+export async function createClass(data) {
+    return prisma.class.create({
+        data,
     });
 }

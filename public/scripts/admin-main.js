@@ -1,91 +1,81 @@
 document.addEventListener("DOMContentLoaded", async function () {
-    let courses = [];
-    let instructors = [];
-    let students = [];
 
-    function saveCourses() {
-        localStorage.setItem("courses", JSON.stringify(courses));
+    let pendingClasses = [];
+    let inProgressClasses = [];
+    let instructorsByExpert = [];
+
+    async function updateClass(crn, data) {
+        await fetch(`http://localhost:3000/api/classes/${crn}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+        });
     }
 
-    function saveStudents() {
-        localStorage.setItem("students", JSON.stringify(students));
+    async function deleteClass(crn) {
+        await fetch(`http://localhost:3000/api/classes/${crn}`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+        });
     }
 
-
-    async function loadCourses() {
-        const saved = localStorage.getItem("courses");
-        if (saved) {
-            return JSON.parse(saved);
-        }
-
-        const res = await fetch("data/courses.json");
-        let data = await res.json();
-        localStorage.setItem("courses", JSON.stringify(data));
-
-        return data;
+    async function promoteStudents(crn) {
+        await fetch(`http://localhost:3000/api/classes/${crn}/promote`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+        });
     }
 
-    async function loadInstructors() {
-        const saved = localStorage.getItem("instructors");
-        if (saved) {
-            return JSON.parse(saved);
-        }
+    async function loadInstructorsByExpert(expertise) {
+        const response = await fetch(`http://localhost:3000/api/instructors/expertise/${expertise}`);
+        const instructorsByExpert = await response.json();
 
-        const res = await fetch("data/instructors.json");
-        let data = await res.json();
-
-        localStorage.setItem("instructors", JSON.stringify(data));
-        return data;
+        return instructorsByExpert;
     }
 
-    async function loadStudents() {
-        const saved = localStorage.getItem("students");
-        if (saved) {
-            return JSON.parse(saved);
-        }
+    async function loadPending() {
+        const response = await fetch(`http://localhost:3000/api/classes/status/pending`);
+        const pendingClasses = await response.json();
 
-        const res = await fetch("data/students.json");
-        const data = await res.json();
-        localStorage.setItem("students", JSON.stringify(data));
-        return data;
+        return pendingClasses;
+    }
+
+    async function loadInProgress() {
+        const response = await fetch(`http://localhost:3000/api/classes/status/inprogress`);
+        const pendingClasses = await response.json();
+
+        return pendingClasses;
     }
 
     function displayInProgress() {
         const inProgressTable = document.querySelector("#in-progress-classes");
-        let html = "";
 
-        for (const course of courses) {
-            const inProgressClasses = course.classes.filter(cls => cls.status === "in-progress");
-
-            html += inProgressClasses.map(cls => `
-                <tr>
-                    <td>${course.courseName}</td>
-                    <td>${course.category}</td>
-                    <td>${cls.crn}</td>
-                    <td>${cls.instructor}</td>
-                </tr>
+        inProgressTable.innerHTML = inProgressClasses.map(c => `
+              <tr>
+                <td>${c.course.name}</td>
+                <td>${c.course.categoryName}</td>
+                <td>${c.crn}</td>
+                <td>${c.instructor.name}</td>
+              </tr>
             `).join('');
-        }
-
-        inProgressTable.innerHTML = html;
     }
 
-    function renderPendingClass(course, cls) {
+    async function renderPendingClass(course, cls) {
         const tableRow = document.createElement("tr");
 
         const courseName = document.createElement("td");
-        courseName.innerHTML = course.courseName;
+        courseName.innerHTML = course.name;
         courseName.classList.add("hide-col");
         tableRow.appendChild(courseName);
 
         const courseCategory = document.createElement("td");
-        courseCategory.innerHTML = course.category;
+        courseCategory.innerHTML = course.categoryName;
         courseCategory.classList.add("hide-col");
         tableRow.appendChild(courseCategory);
 
-        const classCRN = document.createElement("td");
-        classCRN.innerHTML = cls.crn;
-        tableRow.appendChild(classCRN);
+        const courseCRN = document.createElement("td");
+        courseCRN.innerHTML = cls.crn;
+        tableRow.appendChild(courseCRN);
 
         const classInstructor = document.createElement("td");
         tableRow.appendChild(classInstructor);
@@ -95,15 +85,16 @@ document.addEventListener("DOMContentLoaded", async function () {
         selectInstructor.name = "instructors";
 
         const interestedOptions = course.preferenceList
-            .map(instructorName => `
-                <option value="${instructorName}" ${cls.instructor === instructorName ? "selected" : ""}>
-                ${instructorName}
+            .map(instructor => `
+                <option value="${instructor.id}" ${cls.instructor.id === instructor.id ? "selected" : ""}>
+                ${instructor.name}
                 </option>`).join('');
 
-        const otherOptions = instructors
-            .filter(instructor => instructor.expertiseAreas.includes(course.courseName))
+        instructorsByExpert = await loadInstructorsByExpert(course.categoryName);
+
+        const otherOptions = instructorsByExpert
             .map(instructor => `
-                  <option value="${instructor.name}" ${cls.instructor === instructor.name ? "selected" : ""}>
+                  <option value="${instructor.id}" ${cls.instructor.id === instructor.id ? "selected" : ""}>
                     ${instructor.name}
                   </option>
                 `).join('');
@@ -134,30 +125,27 @@ document.addEventListener("DOMContentLoaded", async function () {
         buttonCol.appendChild(CancelButton);
 
         selectInstructor.addEventListener("change", function () {
-            cls.instructor = selectInstructor.value;
-            saveCourses();
+            updateClass(cls.crn, { instructorId: selectInstructor.value });
         });
 
-        validateButton.addEventListener("click", () => handleValidate(course, cls, selectInstructor.value));
-        CancelButton.addEventListener("click", () => handleCancel(cls));
+        validateButton.addEventListener("click", () => handleValidate(cls, selectInstructor.value));
+        CancelButton.addEventListener("click", () => handleCancel(cls.crn));
 
         return tableRow;
     }
 
-    function renderPendingClasses() {
+    async function renderPendingClasses() {
         const tableBody = document.querySelector("#pending-classes");
         tableBody.replaceChildren();
 
-        for (const course of courses) {
-            const pendingClasses = course.classes.filter(cls => cls.status === "pending");
-
-            pendingClasses.forEach(cls => {
-                tableBody.appendChild(renderPendingClass(course, cls));
-            });
+        for (const cls of pendingClasses) {
+            const course = cls.course;
+            const row = await renderPendingClass(course, cls);
+            tableBody.appendChild(row);
         }
     }
 
-    function handleValidate(course, cls, selectedInstructor) {
+    async function handleValidate(cls, selectedInstructor) {
         seatsTakenPercent = cls.takenSeats / cls.totalSeats;
 
         if (seatsTakenPercent < 0.5) {
@@ -170,64 +158,29 @@ document.addEventListener("DOMContentLoaded", async function () {
             return;
         }
 
-        cls.validated = true;
-        cls.status = "in-progress";
+        updateClass(cls.crn, { status: "INPROGRESS", validated: true });
+        promoteStudents(cls.crn);
 
-        for (const s of students) {
-            const index = s.pendingCourses.findIndex(c => c.crn === cls.crn);
-            if (index !== -1) {
-                s.pendingCourses.splice(index, 1);
-            }
-
-            s.inProgressCourses.push({ code: course.code, crn: cls.crn });
-
-        }
-
-        saveStudents();
-        saveCourses();
+        pendingClasses = await loadPending();
+        inProgressClasses = await loadInProgress();
         renderPendingClasses();
         displayInProgress();
     }
 
-    function handleCancel(cancelClass) {
+    async function handleCancel(crn) {
 
-        for (const course of courses) {
-            course.classes = course.classes.filter(cls => cls.crn !== cancelClass.crn);
-        }
+        deleteClass(crn);
 
-        for (const s of students) {
-            const index = s.pendingCourses.findIndex(c => c.crn === c.crn);
-            if (index !== -1) {
-                s.pendingCourses.splice(index, 1);
-            }
-        }
-
-        saveStudents();
-        saveCourses();
-        renderPendingClasses(courses);
+        pendingClasses = await loadPending();
+        inProgressClasses = await loadInProgress();
+        renderPendingClasses();
     }
 
-    document.querySelector("#logout-btn").addEventListener("click", function () {
-        event.preventDefault();
-        localStorage.removeItem("loggedInUser");
-        window.location.href = "login.html";
-    });
 
-    document.querySelector("#logout-btn").addEventListener("click", function () {
-        event.preventDefault();
-        localStorage.removeItem("loggedInUser");
-        window.location.href = "login.html";
-    });
+    pendingClasses = await loadPending();
+    inProgressClasses = await loadInProgress();
 
-    courses = await loadCourses();
-    instructors = await loadInstructors();
-    students = await loadStudents();
-
-    console.log(courses);
-    console.log(instructors);
-
-    renderPendingClasses(courses);
-
+    renderPendingClasses();
     displayInProgress();
 
     // localStorage.removeItem("courses");

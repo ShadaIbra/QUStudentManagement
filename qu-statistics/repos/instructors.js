@@ -9,7 +9,6 @@ export async function getInstructorById(id) {
     });
 }
 
-
 export async function addPreferredCourse(instructorId, courseCode) {
     return prisma.instructor.update({
         where: { id: instructorId },
@@ -30,4 +29,20 @@ export async function removePreferredCourse(instructorId, courseCode) {
             },
         },
     });
+}
+
+export async function getInstructorsByExpertise(expertiseArea) {
+    return prisma.instructor.findMany({
+        where: {
+            expertiseAreas: {
+                some: {
+                    area: expertiseArea,
+                },
+            },
+        },
+    });
+}
+
+export async function getAllInstructors() {
+    return prisma.instructor.findMany();
 }

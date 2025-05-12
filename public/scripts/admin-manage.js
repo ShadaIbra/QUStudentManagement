@@ -1,73 +1,65 @@
 document.addEventListener("DOMContentLoaded", async function () {
-    
+
     categories = [];
     courses = [];
     instructors = [];
 
-    function saveCourses() {
-        localStorage.setItem("courses", JSON.stringify(courses));
+    async function addCourse(course) {
+        console.log(course);
+        await fetch(`http://localhost:3000/api/courses`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(course),
+        });
+    }
+
+    async function addClass(cls) {
+        await fetch(`http://localhost:3000/api/classes`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(cls),
+        });
     }
 
     async function loadCourses() {
-        const saved = localStorage.getItem("courses");
-        if (saved) {
-            return JSON.parse(saved);
-        }
+        const response = await fetch(`http://localhost:3000/api/courses`);
+        const courses = await response.json();
 
-        const res = await fetch("data/courses.json");
-        let data = await res.json();
-
-        localStorage.setItem("courses", JSON.stringify(data));
-        return data;
+        return courses;
     }
 
     async function loadCategories() {
-        const saved = localStorage.getItem("categories");
-        if (saved) {
-            return JSON.parse(saved);
-        }
+        const response = await fetch(`http://localhost:3000/api/categories`);
+        const categories = await response.json();
 
-        const res = await fetch("data/categories.json");
-        let data = await res.json();
-
-        localStorage.setItem("categories", JSON.stringify(data));
-        return data;
+        return categories;
     }
 
     async function loadInstructors() {
-        const saved = localStorage.getItem("instructors");
-        if (saved) {
-            return JSON.parse(saved);
-        }
+        const response = await fetch(`http://localhost:3000/api/instructors`);
+        const instructors = await response.json();
 
-        const res = await fetch("data/instructors.json");
-        let data = await res.json();
-
-        localStorage.setItem("instructors", JSON.stringify(data));
-        return data;
-    }
-    function getCourse(code) {
-        return courses.find(course => course.code === code);
+        return instructors;
     }
 
     function renderPage() {
         const categoriesSelect = document.querySelector("#category");
         categoriesSelect.innerHTML = `<option value="" disabled selected>Select a category</option>`;
-        categoriesSelect.innerHTML += categories.map(category => `<option value="${category}">${category}</option>`).join('');
+        categoriesSelect.innerHTML += categories.map(category => `<option value="${category.categoryName}">${category.categoryName}</option>`).join('');
 
         const prereqsSelect = document.querySelector("#prereqs");
-        prereqsSelect.innerHTML = courses.map(course => `<option value="${course.code}">${course.courseName} (${course.code})</option>`).join('');
+        prereqsSelect.innerHTML = courses.map(course => `<option value="${course.code}">${course.name} (${course.code})</option>`).join('');
 
         const courseSelect = document.querySelector("#course-code");
         courseSelect.innerHTML = `<option value="" disabled selected>Select a Course</option>`;
-        courseSelect.innerHTML += courses.map(course => `<option value="${course.code}">${course.courseName} (${course.code})</option>`).join('');
+        courseSelect.innerHTML += courses.map(course => `<option value="${course.code}">${course.name} (${course.code})</option>`).join('');
 
         const instructorSelect = document.querySelector("#instructor");
         instructorSelect.innerHTML = `<option value="" disabled selected>Select a Instructor</option>`;
-        instructorSelect.innerHTML += instructors.map(instructor => `<option value="${instructor.name}">${instructor.name}</option>`).join('');
+        instructorSelect.innerHTML += instructors.map(instructor => `<option value="${instructor.id}">${instructor.name}</option>`).join('');
     }
 
-    function addCourse(event) {
+    async function handleAddCourse(event) {
         event.preventDefault();
 
         const form = event.target;
@@ -87,38 +79,35 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
 
         const newCourse = {
-            courseName,
-            category,
+            name: courseName,
+            categoryName: category,
             code,
             preferenceOpen: enablePref,
-            prereqsCode: prereqs || [],
-            preferenceList: [],
-            classes: []
-        }
+            coursePrerequisites: prereqs
+        };
 
-        courses.push(newCourse);
+
+        addCourse(newCourse)
         form.reset();
 
-        saveCourses();
+        courses = await loadCourses();
         renderPage();
     };
 
-    function addClass(event) {
+    function handleAddClass(event) {
         event.preventDefault();
 
         const form = event.target;
         const formData = new FormData(form);
 
         const crn = formData.get("class-crn").trim();
-        const code = formData.get("course-code");
+        const courseCode = formData.get("course-code");
         const totalSeats = parseInt(formData.get("total-seats"));
 
-        const instructor = formData.get("instructor");
+        const instructorId = formData.get("instructor");
 
-        const course = getCourse(code);
-
-        for (const c of courses) {
-            if (c.classes.find(c => c.crn === crn)) {
+        for (const course of courses) {
+            if (course.Class.find(c => c.crn === crn)) {
                 alert("A class with this crn already exists.");
                 return;
             }
@@ -126,25 +115,20 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         const newClass = {
             crn,
-            instructor: instructor || null,
+            instructorId: instructorId || null,
             takenSeats: 0,
             totalSeats,
-            status: "pending",
-            validated: false
+            status: "PENDING",
+            validated: false,
+            code: courseCode
+
         }
 
-        course.classes.push(newClass);
+        addClass(newClass);
         form.reset();
 
-        saveCourses();
         renderPage();
     }
-
-    document.querySelector("#logout-btn").addEventListener("click", function () {
-        event.preventDefault();
-        localStorage.removeItem("loggedInUser");
-        window.location.href = "login.html";
-    });
 
     courses = await loadCourses();
     categories = await loadCategories();
@@ -154,8 +138,9 @@ document.addEventListener("DOMContentLoaded", async function () {
     console.log(courses);
     console.log(instructors);
 
-    document.querySelector("#add-course-form").addEventListener("submit", addCourse);
-    document.querySelector("#add-class-form").addEventListener("submit", addClass);
+    document.querySelector("#add-course-form").addEventListener("submit", handleAddCourse);
+    document.querySelector("#add-class-form").addEventListener("submit", handleAddClass);
+
 
     renderPage();
 

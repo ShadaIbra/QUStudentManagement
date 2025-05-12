@@ -26,6 +26,9 @@ export async function PATCH(request, { params }) {
         });
     } catch (error) {
         console.error(`Failed to update grade for student ${studentid} in class ${crn}:`, error);
-        return new Response('Server Error', { status: 500, headers });
+        return new Response('Server Error', {
+            status: 500,
+            headers,
+        });
     }
 }

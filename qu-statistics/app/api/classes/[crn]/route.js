@@ -1,5 +1,4 @@
-import { updateClassByCrn } from '@/repos/classes';
-import { getClassWithStudents } from '@/repos/classes';
+import { updateClassByCrn, getClassWithStudents, deleteClassByCrn } from '@/repos/classes';
 
 const headers = {
     'Access-Control-Allow-Origin': '*',
@@ -14,7 +13,6 @@ export async function OPTIONS() {
         headers,
     });
 }
-
 
 export async function PATCH(request, { params }) {
     const crn = params.crn;
@@ -42,13 +40,40 @@ export async function GET(_, { params }) {
     try {
         const result = await getClassWithStudents(crn);
         if (!result) {
-            return new Response('Class not found', { status: 404, headers });
+            return new Response('Class not found', {
+                status: 404,
+                headers,
+            });
         }
-        return new Response(JSON.stringify(result), { status: 200, headers });
+        return new Response(JSON.stringify(result), {
+            status: 200,
+            headers,
+        });
     } catch (error) {
         console.error('Error fetching class with pending students:', error);
-        return new Response('Server Error', { status: 500, headers });
+        return new Response('Server Error', {
+            status: 500,
+            headers,
+        });
     }
 }
 
 // Patch the class with this crn (for validating in admin-main)
+
+export async function DELETE(_, { params }) {
+    const crn = params.crn;
+
+    try {
+        await deleteClassByCrn(crn);
+        return new Response('Class deleted successfully', {
+            status: 200,
+            headers,
+        });
+    } catch (error) {
+        console.error(`Failed to delete class ${crn}:`, error);
+        return new Response('Server Error', {
+            status: 500,
+            headers,
+        });
+    }
+}
