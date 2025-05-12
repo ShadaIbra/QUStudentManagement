@@ -4,8 +4,8 @@ export default async function StudentsPerFailures() {
   const count = await getStudentsWithAtLeastOneFailure();
 
   return (
-    <div className="students-with-failure">
-      <h3>Students Who Failed At Least One Course</h3>
+    <div className="stat-card">
+      <h2>Students Who Failed At Least One Course</h2>
       <p>{count} students</p>
     </div>
   );

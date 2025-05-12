@@ -4,8 +4,8 @@ export default async function Top3Instructors() {
   const topInstructors = await getTop3InstructorsByClasses();
 
   return (
-    <div>
-      <h3>Top 3 Instructors by Number of Classes</h3>
+    <div className="stat-card">
+      <h2>Top 3 Instructors by Number of Classes</h2>
       <ul>
         {topInstructors.map((instructor) => (
           <li key={instructor.id}>

@@ -3,19 +3,33 @@
 import { Prisma, PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
-export const getTotalStudentsPerYear = async () => {
-  const students = await prisma.student.findMany({
-    select: {
-      id: true,
-      name: true,
-      user: true,
-      pendingCourses: true,
-      inProgressCourses: true,
-      completedCourses: true,
-    },
-  });
+export const getCoursesPerStudent = async () => {
+  const [pending, inProgress, completed] = await Promise.all([
+    prisma.pendingCourse.findMany({
+      select: { studentId: true, classCrn: true },
+    }),
+    prisma.inProgressCourse.findMany({
+      select: { studentId: true, classCrn: true },
+    }),
+    prisma.completedCourse.findMany({
+      select: { studentId: true, classCrn: true },
+    }),
+  ]);
 
-  return students;
+  const allCourses = [...pending, ...inProgress, ...completed];
+
+  const studentCoursesMap = allCourses.reduce((acc, curr) => {
+    if (!acc[curr.studentId]) acc[curr.studentId] = new Set();
+    acc[curr.studentId].add(curr.classCrn);
+    return acc;
+  }, {});
+
+  const coursesPerStudent = Object.keys(studentCoursesMap).map((studentId) => ({
+    studentId,
+    coursesCount: studentCoursesMap[studentId].size,
+  }));
+
+  return coursesPerStudent;
 };
 
 export const getTotalStudentsPerCategory = async () => {
@@ -114,7 +128,10 @@ export const getFailureRatePerCourse = async () => {
       );
       const totalStudents =
         _class.inProgressStudents.length + _class.completedStudents.length;
-      return rate + failedStudents.length / totalStudents;
+
+      const failureRateForClass =
+        totalStudents > 0 ? failedStudents.length / totalStudents : 0;
+      return rate + failureRateForClass;
     }, 0),
   }));
 };
@@ -144,8 +161,12 @@ export const getFailureRatePerCategory = async () => {
         );
         const totalStudents =
           _class.inProgressStudents.length + _class.completedStudents.length;
-        return courseRate + failedStudents.length / totalStudents;
+
+        const failureRateForClass =
+          totalStudents > 0 ? failedStudents.length / totalStudents : 0;
+        return courseRate + failureRateForClass;
       }, 0);
+
       return rate + courseFailureRate / category.courses.length;
     }, 0),
   }));

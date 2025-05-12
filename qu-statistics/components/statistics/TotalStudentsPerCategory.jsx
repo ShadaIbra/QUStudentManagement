@@ -4,8 +4,8 @@ export default async function TotalStudentsPerCategory() {
   const studentsPerCategory = await getTotalStudentsPerCategory();
 
   return (
-    <div className="students-category">
-      <h3>Total Students Per Course Category</h3>
+    <div className="stat-card">
+      <h2>Total Students Per Course Category</h2>
       <ul>
         {studentsPerCategory.map((item, index) => (
           <li key={index}>

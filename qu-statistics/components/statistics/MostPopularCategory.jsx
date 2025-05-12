@@ -6,11 +6,22 @@ export default async function MostPopularCategory() {
   if (!data) return null;
 
   return (
-    <div className="popular-category">
-      <h3>Most Popular Category</h3>
-      <p>
-        {data.categoryName} – {data.totalEnrollments} total enrollments
-      </p>
+    <div className="stat-card">
+      <h2>Most Popular Category</h2>
+      <table className="popular-category-table">
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Total Enrollments</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{data.categoryName}</td>
+            <td>{data.totalEnrollments}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   );
 }

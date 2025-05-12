@@ -4,8 +4,8 @@ export default async function TotalStudentsPerCourse() {
   const studentsPerCourse = await getTotalStudentsPerCourse();
 
   return (
-    <div className="students-course">
-      <h3>Total Students Per Course</h3>
+    <div className="stat-card">
+      <h2>Total Students Per Course</h2>
       <ul>
         {studentsPerCourse.map((item, index) => (
           <li key={index}>

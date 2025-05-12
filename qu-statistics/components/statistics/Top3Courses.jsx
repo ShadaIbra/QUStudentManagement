@@ -4,7 +4,7 @@ export default async function Top3Courses() {
   const data = await getTop3Courses();
 
   return (
-    <div className="top-courses">
+    <div className="stat-card">
       <h2>Top 3 Courses by Class Count</h2>
       <table>
         <thead>
