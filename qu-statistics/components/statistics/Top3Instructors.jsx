@@ -1,30 +1,27 @@
-import { useEffect, useState } from "react";
 import { getTop3InstructorsByClasses } from "@/app/actions";
 
-const Top3Instructors = () => {
-  const [topInstructors, setTopInstructors] = useState([]);
-
-  useEffect(() => {
-    const fetchTopInstructors = async () => {
-      const result = await getTop3InstructorsByClasses();
-      setTopInstructors(result);
-    };
-
-    fetchTopInstructors();
-  }, []);
+export default async function Top3Instructors() {
+  const topInstructors = await getTop3InstructorsByClasses();
 
   return (
-    <div className="top-instructors">
-      <h3>Top 3 Instructors by Number of Classes</h3>
-      <ul>
-        {topInstructors.map((instructor) => (
-          <li key={instructor.id}>
-            {instructor.name} – {instructor._count.classes} classes
-          </li>
-        ))}
-      </ul>
+    <div className="stat-card">
+      <h2>Top 3 Instructors by Number of Classes</h2>
+      <table className="stat-table">
+        <thead>
+          <tr>
+            <th>Instructor</th>
+            <th>Number of Classes</th>
+          </tr>
+        </thead>
+        <tbody>
+          {topInstructors.map((instructor) => (
+            <tr key={instructor.id}>
+              <td>{instructor.name}</td>
+              <td>{instructor.classCount}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
-};
-
-export default Top3Instructors;
+}

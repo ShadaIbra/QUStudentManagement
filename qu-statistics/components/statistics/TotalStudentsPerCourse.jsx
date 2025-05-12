@@ -1,30 +1,27 @@
-import { useEffect, useState } from "react";
 import { getTotalStudentsPerCourse } from "@/app/actions";
 
-const TotalStudentsPerCourse = () => {
-  const [studentsPerCourse, setStudentsPerCourse] = useState([]);
-
-  useEffect(() => {
-    const fetchStudentsPerCourse = async () => {
-      const data = await getTotalStudentsPerCourse();
-      setStudentsPerCourse(data);
-    };
-
-    fetchStudentsPerCourse();
-  }, []);
+export default async function TotalStudentsPerCourse() {
+  const studentsPerCourse = await getTotalStudentsPerCourse();
 
   return (
-    <div className="students-course">
-      <h3>Total Students Per Course</h3>
-      <ul>
-        {studentsPerCourse.map((item, index) => (
-          <li key={index}>
-            {item.courseCode}: {item.studentCount} students
-          </li>
-        ))}
-      </ul>
+    <div className="stat-card">
+      <h2>Total Students Per Course</h2>
+      <table className="stat-table">
+        <thead>
+          <tr>
+            <th>Course</th>
+            <th>Total Students</th>
+          </tr>
+        </thead>
+        <tbody>
+          {studentsPerCourse.map((item, index) => (
+            <tr key={index}>
+              <td>{item.courseCode}</td>
+              <td>{item.studentCount}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
-};
-
-export default TotalStudentsPerCourse;
+}

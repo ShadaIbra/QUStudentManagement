@@ -1,24 +1,23 @@
-import { useEffect, useState } from "react";
 import { getStudentsWithAtLeastOneFailure } from "@/app/actions";
 
-const StudentsPerFailures = () => {
-  const [count, setCount] = useState(0);
-
-  useEffect(() => {
-    const fetchFailureData = async () => {
-      const result = await getStudentsWithAtLeastOneFailure();
-      setCount(result);
-    };
-
-    fetchFailureData();
-  }, []);
+export default async function StudentsPerFailures() {
+  const count = await getStudentsWithAtLeastOneFailure();
 
   return (
-    <div className="students-with-failure">
-      <h3>Students Who Failed At Least One Course</h3>
-      <p>{count} students</p>
+    <div className="stat-card">
+      <h2>Students Who Failed At Least One Course</h2>
+      <table className="stat-table">
+        <thead>
+          <tr>
+            <th>Number of Students</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{count} students</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   );
-};
-
-export default StudentsPerFailures;
+}

@@ -1,30 +1,27 @@
-import { useEffect, useState } from "react";
 import { getFailureRatePerCategory } from "@/app/actions";
 
-const FailureRatePerCategory = () => {
-  const [failureRates, setFailureRates] = useState([]);
-
-  useEffect(() => {
-    const fetchFailureRates = async () => {
-      const data = await getFailureRatePerCategory();
-      setFailureRates(data);
-    };
-
-    fetchFailureRates();
-  }, []);
+export default async function FailureRatePerCategory() {
+  const failureRates = await getFailureRatePerCategory();
 
   return (
-    <div className="failures-category">
-      <h3>Failure Rate Per Course Category</h3>
-      <ul>
-        {failureRates.map((item, index) => (
-          <li key={index}>
-            {item.categoryName}: {item.failureRate.toFixed(2)} failure rate
-          </li>
-        ))}
-      </ul>
+    <div className="stat-card">
+      <h2>Failure Rate Per Course Category</h2>
+      <table className="stat-table">
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Failure Rate</th>
+          </tr>
+        </thead>
+        <tbody>
+          {failureRates.map((item, index) => (
+            <tr key={index}>
+              <td>{item.categoryName}</td>
+              <td>{item.failureRate.toFixed(2)}%</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
-};
-
-export default FailureRatePerCategory;
+}
