@@ -8,6 +8,9 @@ import AverageGradePerCourse from "./statistics/AverageGradePerCourse";
 import Top3Instructors from "./statistics/Top3Instructors";
 import MostPopularCategory from "./statistics/MostPopularCategory";
 import AverageClassSize from "./statistics/AverageClassSize";
+import PassRatePerCourse from "./statistics/PassRatePerCourse";
+
+
 import "/app/globals.css";
 
 const StatisticsPage = () => {
@@ -25,6 +28,8 @@ const StatisticsPage = () => {
         <Top3Instructors />
         <MostPopularCategory />
         <AverageClassSize />
+        <PassRatePerCourse />
+       
       </div>
     </div>
   );

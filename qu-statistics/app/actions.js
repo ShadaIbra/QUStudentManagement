@@ -312,3 +312,36 @@ export const getAverageClassSizePerCourse = async () => {
 
   return result.sort((a, b) => b.avgSize - a.avgSize).slice(0, 5); // top 5 by avg size
 };
+
+export const getPassRatePerCourse = async () => {
+  const courses = await prisma.course.findMany({
+    include: {
+      Class: {
+        include: {
+          completedStudents: true,
+        },
+      },
+    },
+  });
+
+  return courses.map((course) => {
+    let totalPassed = 0;
+    let totalStudents = 0;
+
+    course.Class.forEach((_class) => {
+      _class.completedStudents.forEach((student) => {
+        totalStudents++;
+        if (student.grade !== "F") {
+          totalPassed++;
+        }
+      });
+    });
+
+    const passRate = totalStudents > 0 ? (totalPassed / totalStudents) * 100 : 0;
+
+    return {
+      courseCode: course.code,
+      passRate: passRate.toFixed(2),
+    };
+  });
+};
