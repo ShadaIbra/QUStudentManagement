@@ -6,7 +6,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     let student;
 
     async function updateSeats(crn, taken) {
-        console.log(taken);
         await fetch(`http://localhost:3000/api/classes/${crn}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },

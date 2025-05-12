@@ -38,3 +38,31 @@ export async function getInProgClassesByInstructor(instructorId) {
         },
     });
 }
+
+export async function getClassWithStudents(crn) {
+    return prisma.class.findUnique({
+        where: { crn },
+        include: {
+            course: true,
+            inProgressStudents: {
+                include: {
+                    student: true,
+                },
+            },
+        },
+    });
+}
+
+export async function updateStudentGrade(crn, studentId, grade) {
+    return prisma.inProgressCourse.update({
+        where: {
+            studentId_classCrn: {
+                studentId,
+                classCrn: crn,
+            },
+        },
+        data: {
+            grade,
+        },
+    });
+}

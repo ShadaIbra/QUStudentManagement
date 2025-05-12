@@ -2,89 +2,54 @@ document.addEventListener("DOMContentLoaded", async function () {
     const urlParams = new URLSearchParams(window.location.search);
     const crn = urlParams.get('crn');  // getting CRN from the URL parameters thats called in instructor-main.js
 
-    let courses = [];
+    const instructorId = urlParams.get('instructorId');
+
     let students = [];
-    let course;
+    let cls;
 
-    function saveStudents() {
-        localStorage.setItem("students", JSON.stringify(students));
+    async function updateGrade(studentid, newGrade) {
+        await fetch(`http://localhost:3000/api/classes/${crn}/${studentid}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ grade: newGrade }),
+        });
     }
 
-    async function loadCourses() {
-        const saved = localStorage.getItem("courses");
-        if (saved) {
-            return JSON.parse(saved);
-        }
+    async function loadClass() {
+        const response = await fetch(`http://localhost:3000/api/classes/${crn}`);
+        const cls = await response.json();
 
-        const res = await fetch("data/courses.json");
-        let data = await res.json();
-        localStorage.setItem("courses", JSON.stringify(data));
-
-        return data;
+        return cls;
     }
 
-    async function loadStudents() {
-        const saved = localStorage.getItem("students");
-        if (saved) {
-            return JSON.parse(saved);
-        }
-
-        const res = await fetch("data/students.json");
-        const data = await res.json();
-        localStorage.setItem("students", JSON.stringify(data));
-        return data;
-    }
-
-    function getCourseAndClass(crn) {
-        for (const course of courses) {
-            const cls = course.classes.find(cls => cls.crn === crn);
-            if (cls) {
-                return { course, class: cls };
-            }
-        }
-        return null;
-    }
-
-    function renderStudents() {
-        const courseDetails = getCourseAndClass(crn);
+    function renderStudents(cls) {
         // Display the course header with course name and CRN
         const courseHeader = document.querySelector("#course-header");
-        courseHeader.innerHTML = `${courseDetails.course.courseName} (CRN: ${courseDetails.class.crn})`;
+        courseHeader.innerHTML = `${cls.course.name} (CRN: ${cls.crn})`;
 
         const tbody = document.querySelector("tbody");
 
-        // Filter students who are enrolled in this course (pending, in-progress, or completed)
-        const enrolledStudents = students.filter(student => {
-            const isInProgress = student.inProgressCourses.some(c => c.crn === crn);
-
-            // Return students who are either pending, in-progress, or completed the course
-            return isInProgress;
-        });
-
         // If no students are enrolled in the course, display a message
-        if (enrolledStudents.length === 0) {
+        if (students.length === 0) {
             tbody.innerHTML = "<tr><td colspan='3'>No students enrolled in this course.</td></tr>";
         } else {
             // Map over each enrolled student and generate a table row with the student's grade options
-            tbody.innerHTML = enrolledStudents.map(student => {
-                // Find the completed course for this student and CRN
-                const inProgressCourses = student.inProgressCourses.find(c => c.crn === crn);
-                const currentGrade = inProgressCourses ? inProgressCourses.grade : '';
-
+            tbody.innerHTML = students.map(s => {
                 // Generate the row with the student's email, grade, and grade dropdown
                 return `
                 <tr>
-                    <td>${student.name}</td>
-                    <td>${student.id}</td>
+                    <td>${s.student.name}</td>
+                    <td>${s.student.id}</td>
                     <td>
-                        <select name="grades" id="grades-${student.email}" data-email="${student.email}">
-                            <option value="A" ${currentGrade === 'A' ? 'selected' : ''}>A</option>
-                            <option value="B+" ${currentGrade === 'B+' ? 'selected' : ''}>B+</option>
-                            <option value="B" ${currentGrade === 'B' ? 'selected' : ''}>B</option>
-                            <option value="C+" ${currentGrade === 'C+' ? 'selected' : ''}>C+</option>
-                            <option value="C" ${currentGrade === 'C' ? 'selected' : ''}>C</option>
-                            <option value="D" ${currentGrade === 'D' ? 'selected' : ''}>D</option>
-                            <option value="F" ${currentGrade === 'F' ? 'selected' : ''}>F</option>
+                        <select name="grades" id="grades-${s.student.id}" data-id="${s.student.id}">
+                            <option value="A" ${s.grade === 'A' ? 'selected' : ''}>A</option>
+                            <option value="B+" ${s.grade === 'B+' ? 'selected' : ''}>B+</option>
+                            <option value="B" ${s.grade === 'B' ? 'selected' : ''}>B</option>
+                            <option value="C+" ${s.grade === 'C+' ? 'selected' : ''}>C+</option>
+                            <option value="C" ${s.grade === 'C' ? 'selected' : ''}>C</option>
+                            <option value="D" ${s.grade === 'D' ? 'selected' : ''}>D</option>
+                            <option value="F" ${s.grade === 'F' ? 'selected' : ''}>F</option>
+                            <option value="-" ${s.grade === '-' ? 'selected' : ''}>-</option>
                         </select>
                     </td>
                 </tr>
@@ -94,34 +59,25 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         document.querySelectorAll('select[name="grades"]').forEach(select => {
             select.addEventListener('change', function () {
-                const email = select.dataset.email;
+                const id = select.dataset.id;
                 const newGrade = select.value;
 
-                const student = students.find(s => s.email === email);
-
-                student.inProgressCourses = student.inProgressCourses.filter(c => c.crn !== crn);
-
                 if (newGrade) {
-                    student.inProgressCourses.push({ code: courseDetails.course.code, crn: crn, grade: newGrade });
+                    updateGrade(id, newGrade);
                 }
-
-                // Save updated students array
-                saveStudents();
             });
         });
     }
 
-    // Log out functionality to remove the logged-in instructor and redirect to the login page
-    document.querySelector("#logout-btn").addEventListener("click", function () {
+    document.querySelector("#main-btn").addEventListener("click", function () {
         event.preventDefault();
-        localStorage.removeItem("loggedInUser");
-        window.location.href = "login.html";
+        window.location.href = `instructor-main.html?id=${instructorId}`;
     });
 
-    courses = await loadCourses();
-    students = await loadStudents();
+    cls = await loadClass();
+    students = cls.inProgressStudents;
 
-    renderStudents();
+    renderStudents(cls);
 
     // localStorage.removeItem("instructors");
     // localStorage.removeItem("courses");
