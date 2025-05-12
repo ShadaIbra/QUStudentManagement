@@ -156,37 +156,23 @@ export const getFailureRatePerCategory = async () => {
   }));
 };
 
-export const getTotalStudentsInYear = async (year) => {
+export const getStudentsWithAtLeastOneFailure = async () => {
   const students = await prisma.student.findMany({
     where: {
-      createdAt: {
-        gte: new Date(`${year}-01-01`),
-        lt: new Date(`${year + 1}-01-01`),
+      enrollments: {
+        some: {
+          grade: {
+            lt: 50, // Assuming 50 is the passing grade
+          },
+        },
       },
+    },
+    select: {
+      id: true,
     },
   });
 
   return students.length;
-};
-
-export const getCompletionPercentagePerStudent = async () => {
-  const students = await prisma.student.findMany({
-    include: {
-      completedCourses: true,
-      inProgressCourses: true,
-    },
-  });
-
-  return students.map((student) => {
-    const totalCourses =
-      student.completedCourses.length + student.inProgressCourses.length;
-    const completedPercentage =
-      (student.completedCourses.length / totalCourses) * 100;
-    return {
-      studentId: student.id,
-      completedPercentage,
-    };
-  });
 };
 
 export const getAverageGradePerCourse = async () => {
@@ -221,22 +207,94 @@ export const getAverageGradePerCourse = async () => {
   }));
 };
 
-export const getPendingEnrollmentPerCourse = async () => {
-  const courses = await prisma.course.findMany({
-    include: {
-      Class: {
-        include: {
-          pendingStudents: true,
+export const getTop3InstructorsByClasses = async () => {
+  const instructors = await prisma.instructor.findMany({
+    select: {
+      id: true,
+      name: true,
+      _count: {
+        select: { classes: true },
+      },
+    },
+    orderBy: {
+      classes: {
+        _count: "desc",
+      },
+    },
+    take: 3,
+  });
+
+  return instructors;
+};
+
+export const getMostPopularCategory = async () => {
+  const result = await prisma.category.findMany({
+    select: {
+      categoryName: true,
+      courses: {
+        select: {
+          Class: {
+            select: {
+              _count: {
+                select: {
+                  inProgressStudents: true,
+                  completedStudents: true,
+                  pendingStudents: true,
+                },
+              },
+            },
+          },
         },
       },
     },
   });
 
-  return courses.map((course) => ({
-    courseCode: course.code,
-    pendingEnrollmentCount: course.Class.reduce(
-      (count, _class) => count + _class.pendingStudents.length,
+  const categoriesWithCounts = result.map((cat) => {
+    let totalEnrollments = 0;
+    cat.courses.forEach((course) => {
+      course.Class.forEach((cls) => {
+        totalEnrollments += cls._count.inProgressStudents;
+        totalEnrollments += cls._count.completedStudents;
+        totalEnrollments += cls._count.pendingStudents;
+      });
+    });
+
+    return {
+      categoryName: cat.categoryName,
+      totalEnrollments,
+    };
+  });
+
+  categoriesWithCounts.sort((a, b) => b.totalEnrollments - a.totalEnrollments);
+
+  return categoriesWithCounts[0]; // Most popular
+};
+
+export const getAverageClassSizePerCourse = async () => {
+  const courses = await prisma.course.findMany({
+    select: {
+      code: true,
+      name: true,
+      Class: {
+        select: {
+          totalSeats: true,
+        },
+      },
+    },
+  });
+
+  const result = courses.map((course) => {
+    const totalSeats = course.Class.reduce(
+      (acc, cls) => acc + cls.totalSeats,
       0
-    ),
-  }));
+    );
+    const avgSize =
+      course.Class.length > 0 ? totalSeats / course.Class.length : 0;
+    return {
+      name: course.name,
+      avgSize: avgSize.toFixed(1),
+    };
+  });
+
+  return result.sort((a, b) => b.avgSize - a.avgSize).slice(0, 5); // top 5 by avg size
 };
