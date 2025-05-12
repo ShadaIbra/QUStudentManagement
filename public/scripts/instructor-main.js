@@ -33,8 +33,13 @@ document.addEventListener("DOMContentLoaded", async function () {
         if (event.target.classList.contains("grades-button")) {
             const crn = event.target.getAttribute("data-crn");
 
-            window.location.href = `instructor-grades.html?crn=${crn}`;
+            window.location.href = `instructor-grades.html?crn=${crn}&instructorId=${instructorId}`;
         }
+    });
+
+    document.querySelector("#pref-btn").addEventListener("click", function () {
+        event.preventDefault();
+        window.location.href = `instructor-preference.html?id=${instructorId}`;
     });
 
     instructorCourses = await loadInstructorCourses();

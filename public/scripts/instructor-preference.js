@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", async function () {
-
-    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+    const urlParams = new URLSearchParams(window.location.search);
+    const instructorId = urlParams.get('id');
 
     let courses = [];
     let instructor;
@@ -119,10 +119,9 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     document.querySelector("#search-btn").addEventListener("click", searchCourses);
 
-    document.querySelector("#logout-btn").addEventListener("click", function () {
+    document.querySelector("#main-btn").addEventListener("click", function () {
         event.preventDefault();
-        localStorage.removeItem("loggedInUser");
-        window.location.href = "login.html";
+        window.location.href = `instructor-main.html?id=${instructorId}`;
     });
 
     instructor = await getInstructor();
