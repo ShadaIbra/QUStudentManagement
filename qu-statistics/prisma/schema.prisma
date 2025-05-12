@@ -108,6 +108,7 @@ model PendingCourse {
 model InProgressCourse {
   studentId  String
   classCrn String
+  grade String
 
   student  Student @relation(fields: [studentId], references: [id])
   Class    Class  @relation(fields: [classCrn], references: [crn])
@@ -118,6 +119,7 @@ model InProgressCourse {
 model CompletedCourse {
   studentId  String
   classCrn String
+  grade String
 
   student  Student @relation(fields: [studentId], references: [id])
   Class    Class  @relation(fields: [classCrn], references: [crn])
@@ -135,6 +137,7 @@ model Class {
   crn          String      @id
   instructor   Instructor? @relation(fields: [instructorId], references: [id])
   instructorId String?
+  takenSeats   Int
   totalSeats   Int
   status       Status      @default(PENDING)
   validated    Boolean     @default(false)

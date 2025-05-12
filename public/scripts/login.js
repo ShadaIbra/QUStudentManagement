@@ -40,8 +40,6 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         const email = formData.get("email");
         const password = formData.get("password");
-        // const res = await fetch('data/users.json')
-        // const users = await res.json();
 
         const response = await fetch('http://localhost:3000/api/users');
         const users = await response.json();
@@ -54,13 +52,13 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         if (match) {
             if (userType === "student") {
-                window.location.href = `student-main.html?email=${match.id}`;
+                window.location.href = `student-main.html?id=${match.id}`;
             }
             else if (userType === "admin") {
-                window.location.href = `admin-main.html?email=${match.id}`;
+                window.location.href = `admin-main.html?id=${match.id}`;
             }
             else if (userType === "instructor") {
-                window.location.href = `instructor-main.html?email=${match.id}`;
+                window.location.href = `instructor-main.html?id=${match.id}`;
             }
         } else {
             alert("Login failed: Invalid email, password, or user type.");

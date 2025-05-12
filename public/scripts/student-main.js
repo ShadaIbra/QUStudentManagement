@@ -1,62 +1,60 @@
 document.addEventListener("DOMContentLoaded", async function () {
-    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+    const params = new URLSearchParams(window.location.search);
+    const studentId = params.get("id");
 
-    let courses = [];
+    let pendingClasses = [];
     let student;
 
-    function saveCourses() {
-        localStorage.setItem("courses", JSON.stringify(courses));
+    async function updateSeats(crn, taken) {
+        console.log(taken);
+        await fetch(`http://localhost:3000/api/classes/${crn}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ takenSeats: taken }),
+        });
     }
 
-    function saveStudents() {
-        const students = JSON.parse(localStorage.getItem("students"));
-        const index = students.findIndex(s => s.email === student.email);
+    async function addClass(classCrn) {
+        await fetch(`http://localhost:3000/api/students/${studentId}/pending`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ classCrn }),
+        });
+    }
 
-        if (index !== -1) {
-            students[index] = student;
-            localStorage.setItem("students", JSON.stringify(students));
-        }
+    async function deleteClass(classCrn) {
+        await fetch(`http://localhost:3000/api/students/${studentId}/pending`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ classCrn }),
+        });
+
     }
 
     async function loadCourses() {
-        const saved = localStorage.getItem("courses");
-        if (saved) {
-            return JSON.parse(saved);
-        }
+        const response = await fetch(`http://localhost:3000/api/classes/status/pending`);
+        const pendingClasses = await response.json();
 
-        const res = await fetch("data/courses.json");
-        let data = await res.json();
-        localStorage.setItem("courses", JSON.stringify(data));
-
-        return data;
+        return pendingClasses;
     }
 
-    async function loadStudents() {
-        const saved = localStorage.getItem("students");
-        if (saved) {
-            return JSON.parse(saved);
-        }
+    async function loadStudent() {
 
-        const res = await fetch("data/students.json");
-        const data = await res.json();
-        localStorage.setItem("students", JSON.stringify(data));
-        return data;
-    }
+        const response = await fetch(`http://localhost:3000/api/students/${studentId}`);
+        const student = await response.json();
 
-    async function getStudent() {
-        const students = await loadStudents();
-        return students.find(s => s.email === loggedInUser.email);
+        return student;
     }
 
     function renderClass(course, cls) {
         const tableRow = document.createElement("tr");
 
         const courseName = document.createElement("td");
-        courseName.innerHTML = course.courseName;
+        courseName.innerHTML = course.name;
         tableRow.appendChild(courseName);
 
         const courseCategory = document.createElement("td");
-        courseCategory.innerHTML = course.category;
+        courseCategory.innerHTML = course.categoryName;
         courseCategory.classList.add("hide-col");
         tableRow.appendChild(courseCategory);
 
@@ -65,7 +63,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         tableRow.appendChild(courseCRN);
 
         const classInstructor = document.createElement("td");
-        classInstructor.innerHTML = cls.instructor;
+        classInstructor.innerHTML = cls.instructor.name;
         classInstructor.classList.add("hide-col");
         tableRow.appendChild(classInstructor);
 
@@ -81,7 +79,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         registerButton.innerHTML = "Register";
         buttonCol.appendChild(registerButton);
 
-        if (student.pendingCourses.some(c => c.crn === cls.crn)) {
+        if (student.pendingCourses.some(c => c.classCrn === cls.crn)) {
             registerButton.classList.add("registered");
             registerButton.innerHTML = "Registered";
         };
@@ -91,43 +89,38 @@ document.addEventListener("DOMContentLoaded", async function () {
         return tableRow;
     }
 
-    function renderClasses(courses) {
+    function renderClasses(pendingClasses) {
         const tableBody = document.querySelector("tbody");
         tableBody.replaceChildren();
 
-        for (const course of courses) {
-            const pendingClasses = course.classes.filter(cls => cls.status === "pending");
-
-            pendingClasses.forEach(cls => {
-                tableBody.appendChild(renderClass(course, cls));
-            });
-        }
+        pendingClasses.forEach(cls => {
+            const course = cls.course;
+            tableBody.appendChild(renderClass(course, cls));
+        });
     }
 
-    function handleRegister(event, course, cls) {
+    async function handleRegister(event, course, cls) {
         const passingGrades = ["A", "B+", "B", "C+", "C", "D"];
         const passedCourses = student.completedCourses.filter(course => passingGrades.includes(course.grade)).map(course => course.code);
 
         const hasPassedPrereqs =
-            course.prereqsCode.length === 0 ||
-            course.prereqsCode.every(code => passedCourses.includes(code));
+            course.coursePrerequisites.length === 0 ||
+            course.coursePrerequisites.every(code => passedCourses.includes(code));
 
         const seatsRemaining = cls.totalSeats - cls.takenSeats;
         const registerButton = event.target;
 
+        let takenSeats = cls.takenSeats;
+
         if (registerButton.classList.contains("registered")) {
             registerButton.classList.remove("registered");
             registerButton.innerHTML = "Register";
-            cls.takenSeats -= 1;
+            takenSeats -= 1;
 
-            const index = student.pendingCourses.findIndex(c => c.crn === cls.crn);
+            const index = student.pendingCourses.findIndex(c => c.classCrn === cls.crn);
             if (index !== -1) {
-                student.pendingCourses.splice(index, 1);
+                deleteClass(cls.crn);
             }
-
-            // if (!student.inProgressCourses.some(c => c.crn === cls.crn)) {
-            //     student.inProgressCourses.push({ code: course.code, crn: cls.crn });
-            // }
 
         } else {
             if (!hasPassedPrereqs) {
@@ -142,23 +135,24 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             registerButton.classList.add("registered");
             registerButton.innerHTML = "Registered";
-            cls.takenSeats += 1;
+            takenSeats += 1;
 
-            if (!student.pendingCourses.some(c => c.crn === cls.crn)) {
-                student.pendingCourses.push({ code: course.code, crn: cls.crn });
+            if (!student.pendingCourses.some(c => c.classCrn === cls.crn)) {
+                addClass(cls.crn);
             }
         }
-        saveCourses();
-        saveStudents();
-        renderClasses(courses);
+        updateSeats(cls.crn, takenSeats);
+        student = await loadStudent(); // re-fetch updated student info
+        pendingClasses = await loadCourses(); // re-fetch classes
+        renderClasses(pendingClasses); // refresh the interface
     }
 
     function searchCourses() {
         const search = document.querySelector("#name-search").value.toLowerCase().trim();
 
-        const filteredCourses = courses.filter(c =>
-            c.courseName.toLowerCase().includes(search) ||
-            c.category.toLowerCase().includes(search));
+        const filteredCourses = pendingClasses.filter(c =>
+            c.course.name.toLowerCase().includes(search) ||
+            c.course.categoryName.toLowerCase().includes(search));
 
 
         renderClasses(filteredCourses);
@@ -166,18 +160,17 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     document.querySelector("#search-btn").addEventListener("click", searchCourses);
 
-    document.querySelector("#logout-btn").addEventListener("click", function () {
+    document.querySelector("#courses-btn").addEventListener("click", function () {
         event.preventDefault();
-        localStorage.removeItem("loggedInUser");
-        window.location.href = "login.html";
+        window.location.href = `student-courses.html?id=${studentId}`;
     });
 
-    student = await getStudent();
-    courses = await loadCourses();
-    renderClasses(courses);
+    student = await loadStudent();
+    pendingClasses = await loadCourses();
+    renderClasses(pendingClasses);
 
     console.log(student);
-    console.log(loadCourses());
+    console.log(pendingClasses);
 
     // localStorage.removeItem("students");
     // localStorage.removeItem("courses");
