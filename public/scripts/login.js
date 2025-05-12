@@ -40,26 +40,27 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         const email = formData.get("email");
         const password = formData.get("password");
-        const res = await fetch('data/users.json');
+        // const res = await fetch('data/users.json')
+        // const users = await res.json();
 
-        const users = await res.json();
+        const response = await fetch('http://localhost:3000/api/users');
+        const users = await response.json();
 
         const match = users.find(user =>
             user.email === email &&
             user.password === password &&
-            user.userType === userType
+            user.userType === userType.toUpperCase()
         );
 
         if (match) {
-            localStorage.setItem("loggedInUser", JSON.stringify(match));
             if (userType === "student") {
-                window.location.href = "student-main.html";
+                window.location.href = `student-main.html?email=${match.id}`;
             }
             else if (userType === "admin") {
-                window.location.href = "admin-main.html";
+                window.location.href = `admin-main.html?email=${match.id}`;
             }
             else if (userType === "instructor") {
-                window.location.href = "instructor-main.html";
+                window.location.href = `instructor-main.html?email=${match.id}`;
             }
         } else {
             alert("Login failed: Invalid email, password, or user type.");

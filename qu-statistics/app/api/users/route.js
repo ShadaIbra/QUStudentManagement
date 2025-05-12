@@ -1,18 +1,16 @@
-import { getAllStudents } from '@/repos/students';
+import { getAllUsers } from '@/repos/users';
 
-// Get all students (for login)
 export async function GET() {
   try {
-    const students = await getAllStudents();
-
-    return new Response(JSON.stringify(students), {
+    const users = await getAllUsers();
+    return new Response(JSON.stringify(users), {
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*', 
       },
     });
   } catch (error) {
-    console.error('Failed to fetch students:', error);
+    console.error('Failed to fetch users:', error);
     return new Response('Server Error', { status: 500 });
   }
 }
