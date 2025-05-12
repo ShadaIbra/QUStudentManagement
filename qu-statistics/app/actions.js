@@ -345,3 +345,22 @@ export const getPassRatePerCourse = async () => {
     };
   });
 };
+
+export const getInstructorWithMostClasses = async () => {
+  const instructors = await prisma.instructor.findMany({
+    include: {
+      classes: true,
+    },
+  });
+
+  const instructorClassCounts = instructors.map((instructor) => ({
+    id: instructor.id,
+    name: instructor.name,
+    classCount: instructor.classes.length,
+  }));
+
+  // Sort instructors by class count in descending order and return the one with most classes
+  const topInstructor = instructorClassCounts.sort((a, b) => b.classCount - a.classCount)[0];
+
+  return topInstructor;
+};

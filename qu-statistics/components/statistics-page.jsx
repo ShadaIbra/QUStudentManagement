@@ -9,8 +9,7 @@ import Top3Instructors from "./statistics/Top3Instructors";
 import MostPopularCategory from "./statistics/MostPopularCategory";
 import AverageClassSize from "./statistics/AverageClassSize";
 import PassRatePerCourse from "./statistics/PassRatePerCourse";
-
-
+import InstructorWithMostClasses from "./statistics/InstructorWithMostClasses";
 import "/app/globals.css";
 
 const StatisticsPage = () => {
@@ -29,6 +28,7 @@ const StatisticsPage = () => {
         <MostPopularCategory />
         <AverageClassSize />
         <PassRatePerCourse />
+        <InstructorWithMostClasses/>
        
       </div>
     </div>
