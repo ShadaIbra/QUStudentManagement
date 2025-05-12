@@ -26,3 +26,15 @@ export async function updateClassByCrn(crn, updates) {
         data: updates,
     });
 }
+
+export async function getInProgClassesByInstructor(instructorId) {
+    return prisma.class.findMany({
+        where: {
+            status: 'INPROGRESS',
+            instructorId: instructorId,
+        },
+        include: {
+            course: true,
+        },
+    });
+}

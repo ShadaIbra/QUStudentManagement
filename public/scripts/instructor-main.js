@@ -1,55 +1,14 @@
 document.addEventListener("DOMContentLoaded", async function () {
+    const params = new URLSearchParams(window.location.search);
+    const instructorId = params.get("id");
 
-    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-
-    let instructor;
     let instructorCourses = [];
-    let courses = [];
 
-    async function loadInstructors() {
-        const saved = localStorage.getItem("instructors");
-        if (saved) {
-            return JSON.parse(saved);
-        }
+    async function loadInstructorCourses() {
+        const response = await fetch(`http://localhost:3000/api/classes/status/inprogress/${instructorId}`);
+        const instructorCourses = await response.json();
 
-        const res = await fetch("data/instructors.json");
-        let data = await res.json();
-
-        localStorage.setItem("instructors", JSON.stringify(data));
-        return data;
-    }
-
-    async function getInstructor() {
-        const instructors = await loadInstructors();
-        return instructors.find(instructor => instructor.email === loggedInUser.email);
-    }
-
-    async function loadCourses() {
-        const saved = localStorage.getItem("courses");
-        if (saved) {
-            return JSON.parse(saved);
-        }
-
-        const res = await fetch("data/courses.json");
-        let data = await res.json();
-        localStorage.setItem("courses", JSON.stringify(data));
-
-        return data;
-    }
-
-    //only gets courses that are for the current logged in instructor
-    function getInstructorCourses() {
-        const result = [];
-
-        for (const course of courses) {
-            for (const cls of course.classes) {
-                if (cls.instructor === instructor.name) {
-                    result.push({ course, class: cls });
-                }
-            }
-        }
-
-        return result;
+        return instructorCourses;
     }
 
     function displayInstructorCourses() {
@@ -62,39 +21,24 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         coursesTable.innerHTML = instructorCourses.map(c => `
             <div class="course-card">
-                <h3>${c.course.courseName}</h3>
-                <h4>${c.course.category}</h4>
-                <h4>CRN: ${c.class.crn}</h4>
-                <button class="grades-button" data-crn="${c.class.crn}">Grades</button>
+                <h3>${c.course.name}</h3>
+                <h4>${c.course.categoryName}</h4>
+                <h4>CRN: ${c.crn}</h4>
+                <button class="grades-button" data-crn="${c.crn}">Grades</button>
             </div>
         `).join('');
     }
-
-    function goToGradesPage(crn) {
-        localStorage.setItem("currentCRN", crn);  // Store the CRN in localStorage
-        window.location.href = `instructor-grades.html?crn=${crn}`;
-    }
-
-    document.querySelector("#logout-btn").addEventListener("click", function () {
-        event.preventDefault();
-        localStorage.removeItem("loggedInUser");
-        window.location.href = "login.html";
-    });
 
     document.querySelector("#courses-cards").addEventListener("click", function (event) {
         if (event.target.classList.contains("grades-button")) {
             const crn = event.target.getAttribute("data-crn");
 
-            goToGradesPage(crn);
+            window.location.href = `instructor-grades.html?crn=${crn}`;
         }
     });
 
-    instructor = await getInstructor();
-    courses = await loadCourses();
+    instructorCourses = await loadInstructorCourses();
 
-    instructorCourses = getInstructorCourses();
-
-    console.log(instructor);
     console.log(instructorCourses);
 
     displayInstructorCourses();
